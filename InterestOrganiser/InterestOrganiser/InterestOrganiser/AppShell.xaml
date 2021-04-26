@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Shell xmlns="http://xamarin.com/schemas/2014/forms" 
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:local="clr-namespace:InterestOrganiser.Views"
+       Title="InterestOrganiser"
+       FlyoutBehavior="Disabled"
+       x:Class="InterestOrganiser.AppShell">
+
+
+
+    <ShellItem>
+        <ShellContent
+            ContentTemplate="{DataTemplate local:LoginPage}"/>
+    </ShellItem>
+
+    <TabBar Route="main">
+        <Tab
+            Title="Main"
+            Icon="icon_about.png">
+            <ShellContent 
+                ContentTemplate="{DataTemplate local:MainPage}" />
+        </Tab>
+        <Tab
+            Title="Browse"
+            Icon="icon_feed.png">
+            <ShellContent 
+                ContentTemplate="{DataTemplate local:BrowsePage}" />
+        </Tab>
+    </TabBar>
+</Shell>
