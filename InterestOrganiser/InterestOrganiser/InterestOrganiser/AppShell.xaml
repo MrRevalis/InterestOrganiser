@@ -8,7 +8,7 @@
 
 
 
-    <ShellItem>
+    <ShellItem Route="login">
         <ShellContent
             ContentTemplate="{DataTemplate local:LoginPage}"/>
     </ShellItem>

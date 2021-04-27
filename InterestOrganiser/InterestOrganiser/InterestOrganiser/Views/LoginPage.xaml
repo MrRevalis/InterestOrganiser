@@ -46,6 +46,7 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <Entry
+                    Text="{Binding Email}"
                     Placeholder="Email"
                     Grid.Row="0">
                     <Entry.Behaviors>
@@ -53,11 +54,13 @@
                     </Entry.Behaviors>
                 </Entry>
                 <Entry
+                    Text="{Binding Password}"
                     Placeholder="Password"
                     IsPassword="True"
                     Grid.Row="1"/>
                 <Button
                     Text="Login"
+                    Command="{Binding Login}"
                     Grid.Row="2"/>
             </Grid>
             <StackLayout
@@ -70,7 +73,12 @@
                     FontSize="Body"
                     VerticalOptions="FillAndExpand"
                     VerticalTextAlignment="Center"
-                    HorizontalTextAlignment="Center"/>
+                    HorizontalTextAlignment="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer
+                            Command="{Binding Register}"/>
+                    </Label.GestureRecognizers>
+                </Label>
             </StackLayout>
         </Grid>
     </ContentPage.Content>

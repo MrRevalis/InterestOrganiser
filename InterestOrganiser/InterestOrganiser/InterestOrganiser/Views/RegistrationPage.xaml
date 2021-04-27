@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:InterestOrganiser.ViewModels"
+             xmlns:bh="clr-namespace:InterestOrganiser.Behaviors"
+             xmlns:cv="clr-namespace:InterestOrganiser.Converters"
+             Shell.PresentationMode="ModalAnimated"
+             x:Class="InterestOrganiser.Views.RegistrationPage">
+
+    <ContentPage.BindingContext>
+        <vm:RegistrationViewModel/>
+    </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <cv:FirstValidationErrorConverter x:Key="FirstValidationErrorConverter"/>
+            <cv:InverseBoolConverter x:Key="InverseBoolConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
+    <ContentPage.Content>
+        <Grid
+            VerticalOptions="CenterAndExpand"
+            Margin="20"
+            RowSpacing="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <!--EMAIL-->
+            <Entry
+                Text="{Binding Email.Value}"
+                Placeholder="Email"
+                Grid.Row="0">
+                <Entry.Behaviors>
+                    <bh:EntryLineValidationBehaviour IsValid="{Binding Email.IsValid}"/>
+                </Entry.Behaviors>
+            </Entry>
+            <Label
+                Grid.Row="1"
+                Text="{Binding Email.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
+                IsVisible="{Binding Email.IsValid, Converter={StaticResource InverseBoolConverter}}"
+                Style="{StaticResource ErrorTextStyle}"/>
+            <!---->
+            
+            <!--PASSWORD-->
+            <Entry
+                Text="{Binding Password.Item1.Value}"
+                Placeholder="Password"
+                IsPassword="True"
+                Grid.Row="2">
+                <Entry.Behaviors>
+                    <bh:EntryLineValidationBehaviour IsValid="{Binding Password.Item1.IsValid}"/>
+                </Entry.Behaviors>
+            </Entry>
+            <Label
+                Grid.Row="3"
+                Text="{Binding Password.Item1.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
+                IsVisible="{Binding Password.Item1.IsValid, Converter={StaticResource InverseBoolConverter}}"
+                Style="{StaticResource ErrorTextStyle}"/>
+            <!---->
+            
+            <!--CONFIRM PASSWORD-->
+            <Entry
+                Text="{Binding Password.Item2.Value}"
+                Placeholder="Confirm password"
+                IsPassword="True"
+                Grid.Row="4">
+                <Entry.Behaviors>
+                    <bh:EntryLineValidationBehaviour IsValid="{Binding Password.Item2.IsValid}"/>
+                </Entry.Behaviors>
+            </Entry>
+            <Label
+                Grid.Row="5"
+                Text="{Binding Password.Item2.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
+                IsVisible="{Binding Password.Item2.IsValid, Converter={StaticResource InverseBoolConverter}}"
+                Style="{StaticResource ErrorTextStyle}"/>
+            <!---->
+            
+            <Button
+                Grid.Row="6"
+                Text="Register"
+                Command="{Binding Register}"/>
+            <Label
+                Grid.Row="7"
+                Text="Cancel"
+                TextDecorations="Underline"
+                VerticalOptions="FillAndExpand"
+                VerticalTextAlignment="Center"
+                HorizontalTextAlignment="Center">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer
+                        Command="{Binding Return}"/>
+                </Label.GestureRecognizers>
+            </Label>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>
