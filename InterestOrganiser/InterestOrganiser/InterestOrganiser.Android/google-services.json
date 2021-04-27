@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "190514752112",
+    "firebase_url": "https://fir-database-aff8d-default-rtdb.firebaseio.com",
+    "project_id": "fir-database-aff8d",
+    "storage_bucket": "fir-database-aff8d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:190514752112:android:60f8c778e6275de90da2b5",
+        "android_client_info": {
+          "package_name": "com.companyname.interestorganiser"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "190514752112-abq8cs3e6rr9c9sftkjbqag972tp1bmr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcDjHOBWGI9XlerCFzOS-63wyaCklUhLA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "190514752112-abq8cs3e6rr9c9sftkjbqag972tp1bmr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

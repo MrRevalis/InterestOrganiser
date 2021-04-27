@@ -5,6 +5,7 @@ using Android.Content.PM;
 using Android.Runtime;
 using Android.OS;
 using Xamarin.Forms.Platform.Android;
+using Firebase;
 
 namespace InterestOrganiser.Droid
 {
@@ -16,6 +17,14 @@ namespace InterestOrganiser.Droid
             base.OnCreate(savedInstanceState);
 
             this.SetStatusBarColor(Xamarin.Forms.Color.FromHex("000000").ToAndroid());
+
+
+            var options = new FirebaseOptions.Builder()
+                .SetApplicationId("interestorganiser")
+                .SetApiKey("AIzaSyAAz_2uNo58Qzq8T7J1t6_-3dNMXfBOFrI")
+                .SetStorageBucket("interestorganiser.appspot.com")
+                .Build();
+            FirebaseApp.InitializeApp(Application.Context, options);
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
