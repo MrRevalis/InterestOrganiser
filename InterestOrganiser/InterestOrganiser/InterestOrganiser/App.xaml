@@ -46,12 +46,12 @@
             <Setter Property="Shell.TabBarTitleColor" Value="{DynamicResource SecondaryColor}" />
         </Style>
         <Style BasedOn="{StaticResource BaseStyle}" TargetType="TabBar" />
-        
+
         <Style TargetType="Label" x:Key="ErrorTextStyle">
             <Setter Property="TextColor" Value="Red"/>
             <Setter Property="FontSize" Value="12"/>
         </Style>
-        
+
     </Application.Resources>
     
 </Application>

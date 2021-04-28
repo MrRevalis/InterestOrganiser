@@ -2,7 +2,11 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:InterestOrganiser.ViewModels"
-             x:Class="InterestOrganiser.Views.MainPage">
+             xmlns:md="clr-namespace:InterestOrganiser.Models"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             x:Class="InterestOrganiser.Views.MainPage"
+             x:Name="mainPage"
+             Title="Main">
 
     <ContentPage.BindingContext>
         <vm:MainViewModel/>
@@ -17,9 +21,147 @@
     
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Main Page"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+            <SearchBar
+                x:Name="searchBar">
+                <SearchBar.Behaviors>
+                    <xct:EventToCommandBehavior
+                    EventName="TextChanged"
+                    Command="{Binding SearchChanged}"
+                    CommandParameter="{Binding Text, Source={x:Reference searchBar}}"/>
+                </SearchBar.Behaviors>
+            </SearchBar>
+            
+            <CollectionView
+                Margin="5"
+                ItemsSource="{Binding ItemList}"
+                ItemSizingStrategy="MeasureAllItems">
+
+                <CollectionView.EmptyView>
+                    <Label
+                        Text="No items match your filter."
+                        FontSize="Large"
+                        HorizontalOptions="CenterAndExpand"
+                        VerticalOptions="CenterAndExpand"/>
+                </CollectionView.EmptyView>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <SwipeView
+                            Padding="5"
+                            Threshold="80">
+                            <SwipeView.LeftItems>
+                                <SwipeItemView
+                                    Command="{Binding Source={x:Reference mainPage}, Path=BindingContext.AddToRealised}"
+                                    CommandParameter="{Binding .}"
+                                    BackgroundColor="Transparent">
+                                    <Grid
+                                        RowDefinitions="Auto,*"
+                                        WidthRequest="100">
+                                        
+                                        <BoxView
+                                            CornerRadius="10,0,10,0"
+                                            Color="#DC2424"
+                                            Grid.RowSpan="2"/>
+                                        <Image
+                                            VerticalOptions="Center"
+                                            HorizontalOptions="Center"
+                                            Margin="0, 72, 0, 0">
+                                            <Image.Source>
+                                                <FontImageSource
+                                                    FontFamily="FontAwesome"
+                                                    Glyph="&#xf46c;"
+                                                    Color="White"/>
+                                            </Image.Source>
+                                        </Image>
+                                        <Label
+                                            Grid.Row="1"
+                                            Text="DONE"
+                                            TextColor="White"
+                                            FontSize="Medium"
+                                            HorizontalOptions="Center"
+                                            VerticalOptions="Center"
+                                            Margin="0, 0, 0, 72"/>
+                                    </Grid>
+                                </SwipeItemView>
+                            </SwipeView.LeftItems>
+                            <SwipeView.RightItems>
+                                <SwipeItemView
+                                    Command="{Binding Source={x:Reference mainPage}, Path=BindingContext.AddToRealise}"
+                                    CommandParameter="{Binding .}"
+                                    BackgroundColor="Transparent">
+                                    <Grid
+                                        RowDefinitions="Auto,*"
+                                        WidthRequest="100">
+                                        <BoxView
+                                            CornerRadius="0,10,0,10"
+                                            Color="#4A569D"
+                                            Grid.RowSpan="2"/>
+                                        <Image
+                                            VerticalOptions="Center"
+                                            HorizontalOptions="Center"
+                                            Margin="0, 72, 0, 0">
+                                            <Image.Source>
+                                                <FontImageSource
+                                                    FontFamily="FontAwesome"
+                                                    Glyph="&#xf328;"
+                                                    Color="White"/>
+                                            </Image.Source>
+                                        </Image>
+                                        <Label
+                                            Grid.Row="1"
+                                            Text="ADD"
+                                            TextColor="White"
+                                            FontSize="Medium"
+                                            HorizontalOptions="Center"
+                                            VerticalOptions="Center"
+                                            Margin="0, 0, 0, 72"/>
+                                    </Grid>
+                                </SwipeItemView>
+                            </SwipeView.RightItems>
+
+                            <Grid>
+                                <Frame
+                                    Padding="0"
+                                    CornerRadius="10" 
+                                    HasShadow="True">
+                                    <Grid
+                                        HorizontalOptions="FillAndExpand"
+                                        VerticalOptions="FillAndExpand">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition
+                                                Height="*"/>
+                                            <RowDefinition
+                                                Height="40"/>
+                                        </Grid.RowDefinitions>
+                                        <Image
+                                            Grid.Row="0"
+                                            Aspect="Fill"
+                                            Source="{Binding Image}">
+                                            <Image.GestureRecognizers>
+                                                <TapGestureRecognizer
+                                                    Command="{Binding NavToDetail, Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}}"
+                                                    CommandParameter="{Binding .}"/>
+                                            </Image.GestureRecognizers>
+                                        </Image>
+                                        <Label
+                                            Grid.Row="1"
+                                            FontSize="Large"
+                                            Text="{Binding Name}"
+                                            HorizontalTextAlignment="Center" />
+                                    </Grid>
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer
+                                            Command="{Binding NavToDetail, Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}}"
+                                            CommandParameter="{Binding .}"/>
+                                    </Frame.GestureRecognizers>
+                                </Frame>
+                            </Grid>
+                        </SwipeView>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                
+            </CollectionView>
+            
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

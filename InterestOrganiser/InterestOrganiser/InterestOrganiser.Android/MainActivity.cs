@@ -20,9 +20,9 @@ namespace InterestOrganiser.Droid
 
 
             var options = new FirebaseOptions.Builder()
-                .SetApplicationId("interestorganiser")
+                .SetApplicationId("fir-database-aff8d")
                 .SetApiKey("AIzaSyAAz_2uNo58Qzq8T7J1t6_-3dNMXfBOFrI")
-                .SetStorageBucket("interestorganiser.appspot.com")
+                .SetStorageBucket("fir-database-aff8d.appspot.com")
                 .Build();
             FirebaseApp.InitializeApp(Application.Context, options);
 

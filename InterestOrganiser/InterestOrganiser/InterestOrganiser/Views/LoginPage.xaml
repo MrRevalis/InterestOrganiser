@@ -5,7 +5,7 @@
              xmlns:vm="clr-namespace:InterestOrganiser.ViewModels"
              x:Class="InterestOrganiser.Views.LoginPage"
              Shell.NavBarIsVisible="False">
-
+    
     <ContentPage.BindingContext>
         <vm:LoginViewModel/>
     </ContentPage.BindingContext>
@@ -17,24 +17,43 @@
             <OnPlatform.Android>0, 0, 0, 0</OnPlatform.Android>
         </OnPlatform>
     </ContentPage.Padding>
+
+    <ContentPage.Resources>
+        <LinearGradientBrush 
+            x:Key="Gradient"
+            StartPoint="0,0"
+            EndPoint="1,1">
+            <GradientStop
+                Color="#DC2424"
+                Offset="0.2"/>
+            <GradientStop
+                Color="#4A569D"
+                Offset="1.0"/>
+        </LinearGradientBrush>
+    </ContentPage.Resources>
     
     <ContentPage.Content>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition
-                    Height="60"/>
+                    Height="160"/>
                 <RowDefinition
                     Height="*"/>
                 <RowDefinition
                     Height="60"/>
             </Grid.RowDefinitions>
-            <Label
-                Text="Organiser"
-                FontSize="Large"
-                VerticalOptions="FillAndExpand"
-                VerticalTextAlignment="Center"
-                HorizontalTextAlignment="Center"
-                Grid.Row="0"/>
+            <Frame
+                Background="{StaticResource Gradient}"
+                Grid.Row="0">
+                <Label
+                    Text="Organiser"
+                    TextColor="White"
+                    FontSize="Large"
+                    VerticalOptions="FillAndExpand"
+                    VerticalTextAlignment="Center"
+                    HorizontalTextAlignment="Center"/>
+            </Frame>
+
             <Grid
                 Grid.Row="1"
                 VerticalOptions="CenterAndExpand"
@@ -67,7 +86,7 @@
                 Grid.Row="2">
                 <Label
                     HeightRequest="1"
-                    BackgroundColor="Black"/>
+                    BackgroundColor="LightGray"/>
                 <Label
                     Text="Create new account"
                     FontSize="Body"
