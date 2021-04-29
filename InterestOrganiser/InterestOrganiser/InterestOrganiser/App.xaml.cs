@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using InterestOrganiser.Services;
+using Xamarin.Forms;
 
 namespace InterestOrganiser
 {
@@ -8,6 +9,8 @@ namespace InterestOrganiser
         public App()
         {
             InitializeComponent();
+
+            DependencyService.Register<IMovieDB, MovieDB>();
 
             MainPage = new AppShell();
         }

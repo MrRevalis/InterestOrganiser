@@ -33,19 +33,22 @@
             
             <CollectionView
                 Margin="5"
-                ItemsSource="{Binding ItemList}"
+                ItemsSource="{Binding SearchItems}"
                 ItemSizingStrategy="MeasureAllItems">
 
                 <CollectionView.EmptyView>
                     <Label
                         Text="No items match your filter."
                         FontSize="Large"
+                        HorizontalTextAlignment="Center"
+                        VerticalTextAlignment="Center"
                         HorizontalOptions="CenterAndExpand"
                         VerticalOptions="CenterAndExpand"/>
                 </CollectionView.EmptyView>
 
                 <CollectionView.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate 
+                        x:DataType="md:SearchItem">
                         <SwipeView
                             Padding="5"
                             Threshold="80">
@@ -80,7 +83,7 @@
                                             FontSize="Medium"
                                             HorizontalOptions="Center"
                                             VerticalOptions="Center"
-                                            Margin="0, 0, 0, 72"/>
+                                            Margin="0, 0, 0, 62"/>
                                     </Grid>
                                 </SwipeItemView>
                             </SwipeView.LeftItems>
@@ -114,7 +117,7 @@
                                             FontSize="Medium"
                                             HorizontalOptions="Center"
                                             VerticalOptions="Center"
-                                            Margin="0, 0, 0, 72"/>
+                                            Margin="0, 0, 0, 62"/>
                                     </Grid>
                                 </SwipeItemView>
                             </SwipeView.RightItems>
@@ -129,14 +132,14 @@
                                         VerticalOptions="FillAndExpand">
                                         <Grid.RowDefinitions>
                                             <RowDefinition
-                                                Height="*"/>
+                                                Height="160"/>
                                             <RowDefinition
-                                                Height="40"/>
+                                                Height="*"/>
                                         </Grid.RowDefinitions>
                                         <Image
                                             Grid.Row="0"
                                             Aspect="Fill"
-                                            Source="{Binding Image}">
+                                            Source="{Binding Background}">
                                             <Image.GestureRecognizers>
                                                 <TapGestureRecognizer
                                                     Command="{Binding NavToDetail, Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}}"
@@ -146,7 +149,7 @@
                                         <Label
                                             Grid.Row="1"
                                             FontSize="Large"
-                                            Text="{Binding Name}"
+                                            Text="{Binding Title}"
                                             HorizontalTextAlignment="Center" />
                                     </Grid>
                                     <Frame.GestureRecognizers>
