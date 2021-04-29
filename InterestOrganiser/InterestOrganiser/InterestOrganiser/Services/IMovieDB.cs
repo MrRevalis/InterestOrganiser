@@ -11,5 +11,6 @@ namespace InterestOrganiser.Services
     {
         Task<List<SearchItem>> SearchMovie(string title);
         Task<List<SearchItem>> SearchTV(string title);
+        Task<DetailItem> MovieDetail(int ID);
     }
 }

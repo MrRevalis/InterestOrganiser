@@ -2,18 +2,105 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:InterestOrganiser.ViewModels"
-             x:Class="InterestOrganiser.Views.DetailPage">
+             x:Class="InterestOrganiser.Views.DetailPage"
+             Title="{Binding Item.Title}">
 
     <ContentPage.BindingContext>
         <vm:DetailViewModel/>
     </ContentPage.BindingContext>
     
     <ContentPage.Content>
-        <StackLayout>
-            <Label 
-                Text="{Binding ItemName}"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <RefreshView
+                Grid.Row="0"
+                Command="{Binding Refresh}"
+                IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
+                <ScrollView>
+                    <StackLayout>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition
+                                    Height="200"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition
+                                    Width="120"/>
+                                <ColumnDefinition
+                                    Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Image
+                                Grid.Row="0"
+                                Grid.ColumnSpan="2"
+                                Aspect="Fill"
+                                Source="{Binding Item.Background}"/>
+                            <Image
+                                Grid.Row="0"
+                                Margin="5"
+                                Source="{Binding Item.Poster}"/>
+                        </Grid>
+                        <Label
+                            Text="{Binding Item.Title}"
+                            FontSize="Title"
+                            Margin="5"
+                            HorizontalTextAlignment="Center"/>
+                        <Grid
+                            BackgroundColor="#DC2424"
+                            Padding="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition
+                                    Width="80*"/>
+                                <ColumnDefinition
+                                    Width="20*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label
+                                TextColor="White"
+                                FontSize="Medium"
+                                HorizontalTextAlignment="Center"
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Text="{Binding Item.Release}"/>
+                            <Label
+                                TextColor="White"
+                                FontSize="Medium"
+                                HorizontalTextAlignment="Start"
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Text="{Binding Item.Runtime}"/>
+                            <Label
+                                TextColor="White"
+                                FontSize="Medium"
+                                HorizontalTextAlignment="Center"
+                                Grid.Row="1"
+                                Grid.ColumnSpan="2"
+                                Text="{Binding Item.Genres}"/>
+                        </Grid>
+                        <Label
+                            Text="Description"
+                            Margin="5"
+                            FontSize="Subtitle"/>
+                        <Label
+                            Margin="5, 0, 5, 5"
+                            FontSize="Body"
+                            Text="{Binding Item.Overview}"/>
+                    </StackLayout>
+                </ScrollView>
+            </RefreshView>
+            <Button
+                Grid.Row="0"
+                WidthRequest="60"
+                HeightRequest="60"
+                BorderRadius="40"
+                Margin="5"
+                VerticalOptions="End"
+                HorizontalOptions="End"
+                Text="+"/>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>
