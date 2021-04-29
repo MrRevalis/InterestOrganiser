@@ -2,7 +2,10 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:InterestOrganiser.ViewModels"
+             xmlns:pv="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView" 
+             xmlns:cm="http://xamarin.com/schemas/2020/toolkit"
              x:Class="InterestOrganiser.Views.DetailPage"
+             x:Name="mainPage"
              Title="{Binding Item.Title}">
 
     <ContentPage.BindingContext>
@@ -92,15 +95,96 @@
                     </StackLayout>
                 </ScrollView>
             </RefreshView>
-            <Button
+
+            <pv:PancakeView
                 Grid.Row="0"
-                WidthRequest="60"
-                HeightRequest="60"
-                BorderRadius="40"
-                Margin="5"
-                VerticalOptions="End"
                 HorizontalOptions="End"
-                Text="+"/>
+                VerticalOptions="End"
+                Margin="10"
+                CornerRadius="40"
+                BackgroundColor="Black"
+                Padding="20">
+                <cm:Expander
+                    Rotation="180"
+                    HorizontalOptions="Start"
+                    VerticalOptions="End">
+                    <cm:Expander.Header>
+                        <Image
+                            Source="ic_action_add.png"
+                            WidthRequest="30"
+                            HeightRequest="30"
+                            Rotation="180">
+                            <Image.Triggers>
+                                <DataTrigger TargetType="Image"
+                                             Binding="{Binding Source={RelativeSource AncestorType={x:Type cm:Expander}}, Path=IsExpanded}"
+                                             Value="True">
+                                    <Setter Property="Source" Value="ic_action_close.png"/>
+                                </DataTrigger>
+                            </Image.Triggers>
+                        </Image>
+                    </cm:Expander.Header>
+                    <StackLayout
+                        Rotation="180">
+                        <StackLayout
+                            Margin="0, 5">
+                            <ImageButton
+                                Source="ic_action_check_box_outline_blank.png"
+                                WidthRequest="30"
+                                HeightRequest="30"
+                                BackgroundColor="Transparent"
+                                Command="{Binding AddToRealise}">
+                                <ImageButton.Triggers>
+                                    <DataTrigger
+                                        TargetType="ImageButton"
+                                        Binding="{Binding ItemToRealise}"
+                                        Value="True">
+                                        <Setter Property="Source" Value="ic_action_check_box_todo.png"/>
+                                    </DataTrigger>
+                                </ImageButton.Triggers>
+                                <ImageButton.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding Source={x:Reference mainPage}, Path=BindingContext.AddToRealise}"/>
+                                </ImageButton.GestureRecognizers>
+                            </ImageButton>
+                            <Label
+                                TextColor="White"
+                                HorizontalTextAlignment="Center"
+                                Text="{Binding Realise}"/>
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding Source={x:Reference mainPage}, Path=BindingContext.AddToRealise}"/>
+                            </StackLayout.GestureRecognizers>
+                        </StackLayout>
+                        <StackLayout
+                            Margin="0, 0, 0, 10">
+                            <ImageButton
+                                Source="ic_action_check_box.png"
+                                WidthRequest="30"
+                                HeightRequest="30"
+                                BackgroundColor="Transparent"
+                                Command="{Binding AddRealised}">
+                                <ImageButton.Triggers>
+                                    <DataTrigger
+                                        TargetType="ImageButton"
+                                        Binding="{Binding ItemRealised}"
+                                        Value="True">
+                                        <Setter Property="Source" Value="ic_action_check_box_red.png"/>
+                                    </DataTrigger>
+                                </ImageButton.Triggers>
+                            </ImageButton>
+                            <Label
+                                TextColor="White"
+                                HorizontalTextAlignment="Center"
+                                Text="{Binding Realised}"/>
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding Source={x:Reference mainPage}, Path=BindingContext.AddRealised}"/>
+                            </StackLayout.GestureRecognizers>
+                        </StackLayout>
+                    </StackLayout>
+                </cm:Expander>
+            </pv:PancakeView>
+            
         </Grid>
     </ContentPage.Content>
 </ContentPage>

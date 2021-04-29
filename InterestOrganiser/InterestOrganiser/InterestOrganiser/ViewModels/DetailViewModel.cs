@@ -17,7 +17,11 @@ namespace InterestOrganiser.ViewModels
         public string Type
         {
             get => type;
-            set => SetProperty(ref type, value);
+            set
+            {
+                SetProperty(ref type, value);
+                ItemType();
+            }
         }
 
         private int id;
@@ -29,15 +33,62 @@ namespace InterestOrganiser.ViewModels
                 Task.Run(() => ExecuteLoadItem());
             }
         }
-        private IMovieDB movieDB;
 
+        private bool itemRealised;
+        public bool ItemRealised
+        {
+            get => itemRealised;
+            set => SetProperty(ref itemRealised, value);
+        }
+
+        private bool itemToRealise;
+        public bool ItemToRealise
+        {
+            get => itemToRealise;
+            set => SetProperty(ref itemToRealise, value);
+        }
+
+        private string realised;
+        public string Realised
+        {
+            get => realised;
+            set => SetProperty(ref realised, value);
+        }
+
+        private string realise;
+        public string Realise
+        {
+            get => realise;
+            set => SetProperty(ref realise, value);
+        }
+
+        private IMovieDB movieDB;
         public DetailItem Item { get; set; }
         public ICommand Refresh { get; }
+        public ICommand AddRealised { get; }
+        public ICommand AddToRealise { get; }
 
         public DetailViewModel()
         {
             movieDB = DependencyService.Get<IMovieDB>();
             Refresh = new Command(async () => await ExecuteLoadItem());
+
+            ItemRealised = false;
+            ItemToRealise = true;
+
+            AddRealised = new Command(async () => await AddRealisedItem());
+            AddToRealise = new Command(async () => await AddToRealiseItem());
+
+        }
+
+        private async Task AddToRealiseItem()
+        {
+            ItemToRealise = !ItemToRealise;
+        }
+
+        private async Task AddRealisedItem()
+        {
+            ItemRealised = !ItemRealised;
         }
 
         private async Task ExecuteLoadItem()
@@ -52,6 +103,21 @@ namespace InterestOrganiser.ViewModels
             }
 
             IsBusy = false;
+        }
+
+        private void ItemType()
+        {
+            switch (Type)
+            {
+                case "Movie":
+                    Realise = "To watch";
+                    Realised = "Watched";
+                    break;
+                case "TV":
+                    Realise = "To watch";
+                    Realised = "Watched";
+                    break;
+            }
         }
     }
 }

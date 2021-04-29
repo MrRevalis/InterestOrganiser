@@ -22,10 +22,12 @@ namespace InterestOrganiser.ViewModels
         public ObservableCollection<SearchItem> SearchItems { get; set; }
 
         private IMovieDB movieDB;
+        private IFirebase firebase;
 
         public MainViewModel()
         {
             movieDB = DependencyService.Get<IMovieDB>();
+            firebase = DependencyService.Get<IFirebase>();
             SearchItems = new ObservableCollection<SearchItem>();
 
             ItemList = new List<TestItem>()
@@ -42,6 +44,17 @@ namespace InterestOrganiser.ViewModels
             AddToRealise = new Command<SearchItem>(Realise);
 
             SearchChanged = new Command<string>(async (sender) => await Search(sender));
+
+            Logout = new Command(LogoutUser);
+        }
+
+        private void LogoutUser()
+        {
+            var logout = firebase.SignOut();
+            if (logout)
+            {
+                Shell.Current.GoToAsync("//login");
+            }
         }
 
         private async Task Search(string text)
