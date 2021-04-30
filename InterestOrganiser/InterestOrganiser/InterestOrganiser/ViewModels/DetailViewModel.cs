@@ -94,8 +94,13 @@ namespace InterestOrganiser.ViewModels
         private async Task ExecuteLoadItem()
         {
             IsBusy = true;
+            DetailItem item = null;
+            switch (Type.ToLower())
+            {
+                case "movie": item = await movieDB.MovieDetail(ID); break;
+                case "tv": item = await movieDB.TvDetail(ID); break;
+            }
 
-            DetailItem item = await movieDB.MovieDetail(ID);
             if(item != null)
             {
                 Item = item;
@@ -109,11 +114,11 @@ namespace InterestOrganiser.ViewModels
         {
             switch (Type)
             {
-                case "Movie":
+                case "movie":
                     Realise = "To watch";
                     Realised = "Watched";
                     break;
-                case "TV":
+                case "tv":
                     Realise = "To watch";
                     Realised = "Watched";
                     break;

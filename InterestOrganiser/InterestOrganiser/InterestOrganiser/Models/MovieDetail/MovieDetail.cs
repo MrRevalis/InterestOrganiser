@@ -31,5 +31,8 @@ namespace MovieBase.Models.MovieDetail
         public bool video { get; set; }
         public double vote_average { get; set; }
         public int vote_count { get; set; }
+        public string name { get; set; }
+        public List<int> episode_run_time { get; set; }
+        public string first_air_date { get; set; }
     }
 }

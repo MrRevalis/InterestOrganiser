@@ -20,8 +20,13 @@
     </ContentPage.ToolbarItems>
     
     <ContentPage.Content>
-        <StackLayout>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
             <SearchBar
+                Grid.Row="0"
                 x:Name="searchBar">
                 <SearchBar.Behaviors>
                     <xct:EventToCommandBehavior
@@ -30,11 +35,14 @@
                     CommandParameter="{Binding Text, Source={x:Reference searchBar}}"/>
                 </SearchBar.Behaviors>
             </SearchBar>
-            
+
             <CollectionView
+                Grid.Row="1"
                 Margin="5"
-                ItemsSource="{Binding SearchItems}"
-                ItemSizingStrategy="MeasureAllItems">
+                ItemsSource="{Binding SearchItemsDisplay}"
+                ItemSizingStrategy="MeasureAllItems"
+                RemainingItemsThreshold="3"
+                RemainingItemsThresholdReachedCommand="{Binding LoadMoreItems}">
 
                 <CollectionView.EmptyView>
                     <Label
@@ -60,7 +68,7 @@
                                     <Grid
                                         RowDefinitions="Auto,*"
                                         WidthRequest="100">
-                                        
+
                                         <BoxView
                                             CornerRadius="10,0,10,0"
                                             Color="#DC2424"
@@ -163,9 +171,14 @@
                         </SwipeView>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
-                
             </CollectionView>
-            
-        </StackLayout>
+            <ActivityIndicator
+                Grid.Row="1"
+                IsRunning="{Binding IsBusy}"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                Margin="0, 0, 0, 20"
+                InputTransparent="True"/>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

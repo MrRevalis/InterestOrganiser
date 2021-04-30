@@ -20,5 +20,7 @@ namespace InterestOrganiser.Models.Movie
         public bool video { get; set; }
         public double vote_average { get; set; }
         public int vote_count { get; set; }
+        public string media_type { get; set; }
+        public string name { get; set; }
     }
 }

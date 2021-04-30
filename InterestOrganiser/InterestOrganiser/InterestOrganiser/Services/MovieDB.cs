@@ -41,7 +41,7 @@ namespace InterestOrganiser.Services
                         Title = movieResponse.original_title,
                         VoteAverage = movieResponse.vote_average,
                         Runtime = TimeConverter(movieResponse.runtime),
-                        Release = Convert.ToDateTime(movieResponse.release_date).ToShortDateString(),
+                        Release = movieResponse.release_date != null ? Convert.ToDateTime(movieResponse.release_date).ToShortDateString() : "",
                         Poster = imageSource + movieResponse.poster_path,
                         Background = imageSource + movieResponse.backdrop_path,
                         Genres = genres,
@@ -81,11 +81,67 @@ namespace InterestOrganiser.Services
             throw new NotImplementedException();
         }
 
+        public async Task<List<SearchItem>> TrendingList(string mediaType, string time)
+        {
+            HttpResponseMessage response = await client.GetAsync($"trending/{mediaType}/{time}?api_key={api}");
+            if (response.IsSuccessStatusCode)
+            {
+                string content = await response.Content.ReadAsStringAsync();
+                Movie movieResponse = JsonConvert.DeserializeObject<Movie>(content);
+                if (movieResponse.results.Any())
+                {
+                    List<SearchItem> movies = movieResponse.results.Select(x => new SearchItem
+                    {
+                        ID = x.id,
+                        Type = x.media_type,
+                        Title = x.title ?? x.name,
+                        Background = imageSource + x.backdrop_path,
+                    }).ToList();
+
+                    return movies;
+                }
+            }
+            return null;
+        }
+
+        public async Task<DetailItem> TvDetail(int ID)
+        {
+            HttpResponseMessage response = await client.GetAsync($"tv/{ID}?api_key={api}");
+            if (response.IsSuccessStatusCode)
+            {
+                string content = await response.Content.ReadAsStringAsync();
+                MovieDetail movieResponse = JsonConvert.DeserializeObject<MovieDetail>(content);
+
+                if (movieResponse != null)
+                {
+                    string genres = String.Join(", ", movieResponse.genres.Select(x => x.name));
+
+                    return new DetailItem()
+                    {
+                        Title = movieResponse.original_title ?? movieResponse.name,
+                        VoteAverage = movieResponse.vote_average,
+                        Runtime = TimeConverter(movieResponse.episode_run_time[0]),
+                        Release = movieResponse.first_air_date != null ? Convert.ToDateTime(movieResponse.first_air_date).ToShortDateString() : "",
+                        Poster = imageSource + movieResponse.poster_path,
+                        Background = imageSource + movieResponse.backdrop_path,
+                        Genres = genres,
+                        Overview = movieResponse.overview
+                    };
+                }
+            }
+
+            return null;
+        }
 
         private string TimeConverter(int time)
         {
             TimeSpan newTime = TimeSpan.FromMinutes(time);
-            return $"{newTime.Hours}h {newTime.Minutes % 60}m";
+            if(newTime.Hours == 0)
+            {
+                return $"{newTime.Minutes % 60}m";
+            }
+            else
+                return $"{newTime.Hours}h {newTime.Minutes % 60}m";
         }
     }
 }

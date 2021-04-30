@@ -9,8 +9,10 @@ namespace InterestOrganiser.Services
 {
     public interface IMovieDB
     {
+        Task<List<SearchItem>> TrendingList(string mediaType, string time);
         Task<List<SearchItem>> SearchMovie(string title);
         Task<List<SearchItem>> SearchTV(string title);
         Task<DetailItem> MovieDetail(int ID);
+        Task<DetailItem> TvDetail(int ID);
     }
 }

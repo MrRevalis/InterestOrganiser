@@ -23,7 +23,6 @@ namespace InterestOrganiser.ViewModels
         {
             Login = new Command(async () => await LoginMethod());
             Register = new Command(async () => await Shell.Current.GoToAsync("//login/registration"));
-
             auth = DependencyService.Get<IFirebase>();
         }
 
@@ -31,11 +30,13 @@ namespace InterestOrganiser.ViewModels
         {
             if(!String.IsNullOrEmpty(Email) && !String.IsNullOrEmpty(Password))
             {
+                IsBusy = true;
                 var token = await auth.Login(Email, Password);
                 if(token != String.Empty)
                 {
                     await Shell.Current.GoToAsync("//main");
                 }
+                IsBusy = false;
             }
         }
     }
