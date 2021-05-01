@@ -118,7 +118,11 @@ namespace InterestOrganiser.ViewModels
 
             IsBusy = true;
             List<SearchItem> movies = await movieDB.SearchMovie(text);
-            if (movies != null && movies.Any())
+            List<SearchItem> tv = await movieDB.SearchTV(text);
+
+            List<SearchItem> concat = movies.Concat(tv).OrderBy(x => x.ID).ToList();
+
+            if (concat.Any())
             {
                 SearchItems.Clear();
                 foreach (SearchItem item in movies)

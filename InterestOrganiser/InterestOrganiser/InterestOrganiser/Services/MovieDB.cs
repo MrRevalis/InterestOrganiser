@@ -65,7 +65,7 @@ namespace InterestOrganiser.Services
                     List<SearchItem> movies = movieResponse.results.Select(x => new SearchItem
                     {
                         ID = x.id,
-                        Type = "Movie",
+                        Type = "movie",
                         Title = x.title,
                         Background = imageSource + x.backdrop_path,
                     }).ToList();
@@ -73,12 +73,30 @@ namespace InterestOrganiser.Services
                     return movies;
                 }
             }
-            return null;
+            return new List<SearchItem>();
         }
 
-        public Task<List<SearchItem>> SearchTV(string title)
+        public async Task<List<SearchItem>> SearchTV(string title)
         {
-            throw new NotImplementedException();
+            HttpResponseMessage response = await client.GetAsync($"search/tv?api_key={api}&query={title}");
+            if (response.IsSuccessStatusCode)
+            {
+                string content = await response.Content.ReadAsStringAsync();
+                Movie movieResponse = JsonConvert.DeserializeObject<Movie>(content);
+                if (movieResponse.results.Any())
+                {
+                    List<SearchItem> movies = movieResponse.results.Select(x => new SearchItem
+                    {
+                        ID = x.id,
+                        Type = "tv",
+                        Title = x.name,
+                        Background = imageSource + x.backdrop_path,
+                    }).ToList();
+
+                    return movies;
+                }
+            }
+            return new List<SearchItem>();
         }
 
         public async Task<List<SearchItem>> TrendingList(string mediaType, string time)
@@ -101,7 +119,7 @@ namespace InterestOrganiser.Services
                     return movies;
                 }
             }
-            return null;
+            return new List<SearchItem>();
         }
 
         public async Task<DetailItem> TvDetail(int ID)
