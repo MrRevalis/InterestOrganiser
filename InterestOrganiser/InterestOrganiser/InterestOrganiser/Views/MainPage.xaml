@@ -4,6 +4,7 @@
              xmlns:vm="clr-namespace:InterestOrganiser.ViewModels"
              xmlns:md="clr-namespace:InterestOrganiser.Models"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:cv="clr-namespace:InterestOrganiser.Converters"
              x:Class="InterestOrganiser.Views.MainPage"
              x:Name="mainPage"
              Title="Main">
@@ -18,6 +19,14 @@
             Icon="ic_action_logout.png"
             Command="{Binding Logout}"/>
     </ContentPage.ToolbarItems>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <cv:ImageSourceConverter x:Key="ImageSourceConverter"/>
+            <cv:ItemTypeToVisibility x:Key="ItemTypeToVisibility"/>
+            <cv:BookCollectionViewConverter x:Key="BookCollectionViewConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     
     <ContentPage.Content>
         <Grid>
@@ -132,6 +141,7 @@
 
                             <Grid>
                                 <Frame
+                                    IsVisible="{Binding Type, Converter={StaticResource ItemTypeToVisibility}}"
                                     Padding="0"
                                     CornerRadius="10" 
                                     HasShadow="True">
@@ -147,7 +157,7 @@
                                         <Image
                                             Grid.Row="0"
                                             Aspect="Fill"
-                                            Source="{Binding Background}">
+                                            Source="{Binding Background, Converter={StaticResource ImageSourceConverter}}">
                                             <Image.GestureRecognizers>
                                                 <TapGestureRecognizer
                                                     Command="{Binding NavToDetail, Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}}"
@@ -158,6 +168,45 @@
                                             Grid.Row="1"
                                             FontSize="Large"
                                             Margin="5"
+                                            Text="{Binding Title}"
+                                            HorizontalTextAlignment="Center" />
+                                    </Grid>
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer
+                                            Command="{Binding NavToDetail, Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}}"
+                                            CommandParameter="{Binding .}"/>
+                                    </Frame.GestureRecognizers>
+                                </Frame>
+                                <Frame
+                                    IsVisible="{Binding Type, Converter={StaticResource BookCollectionViewConverter}}"
+                                    Padding="0"
+                                    CornerRadius="10" 
+                                    HasShadow="True">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition
+                                                Height="200"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <Image
+                                            Grid.Row="0"
+                                            Aspect="Fill"
+                                            Source="{Binding Background, Converter={StaticResource ImageSourceConverter}}">
+                                            <Image.GestureRecognizers>
+                                                <TapGestureRecognizer
+                                                    Command="{Binding NavToDetail, Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}}"
+                                                    CommandParameter="{Binding .}"/>
+                                            </Image.GestureRecognizers>
+                                        </Image>
+                                        <Label
+                                            Grid.Row="0"
+                                            Grid.Column="1"
+                                            FontSize="Large"
+                                            Margin="5"
+                                            VerticalTextAlignment="Center"
                                             Text="{Binding Title}"
                                             HorizontalTextAlignment="Center" />
                                     </Grid>

@@ -24,7 +24,7 @@ namespace InterestOrganiser.Services
             client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public async Task<DetailItem> MovieDetail(int ID)
+        public async Task<DetailItem> MovieDetail(string ID)
         {
             HttpResponseMessage response = await client.GetAsync($"movie/{ID}?api_key={api}");
             if (response.IsSuccessStatusCode)
@@ -64,7 +64,7 @@ namespace InterestOrganiser.Services
                 {
                     List<SearchItem> movies = movieResponse.results.Select(x => new SearchItem
                     {
-                        ID = x.id,
+                        ID = x.id.ToString(),
                         Type = "movie",
                         Title = x.title,
                         Background = imageSource + x.backdrop_path,
@@ -87,7 +87,7 @@ namespace InterestOrganiser.Services
                 {
                     List<SearchItem> movies = movieResponse.results.Select(x => new SearchItem
                     {
-                        ID = x.id,
+                        ID = x.id.ToString(),
                         Type = "tv",
                         Title = x.name,
                         Background = imageSource + x.backdrop_path,
@@ -110,7 +110,7 @@ namespace InterestOrganiser.Services
                 {
                     List<SearchItem> movies = movieResponse.results.Select(x => new SearchItem
                     {
-                        ID = x.id,
+                        ID = x.id.ToString(),
                         Type = x.media_type,
                         Title = x.title ?? x.name,
                         Background = imageSource + x.backdrop_path,
@@ -122,7 +122,7 @@ namespace InterestOrganiser.Services
             return new List<SearchItem>();
         }
 
-        public async Task<DetailItem> TvDetail(int ID)
+        public async Task<DetailItem> TvDetail(string ID)
         {
             HttpResponseMessage response = await client.GetAsync($"tv/{ID}?api_key={api}");
             if (response.IsSuccessStatusCode)

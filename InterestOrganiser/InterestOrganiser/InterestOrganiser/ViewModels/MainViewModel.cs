@@ -32,6 +32,7 @@ namespace InterestOrganiser.ViewModels
 
         private IMovieDB movieDB;
         private IFirebase firebase;
+        private IBookApi bookApi;
 
         private int batchSize = 5;
         private int currentItemsIndex = 0;
@@ -40,6 +41,8 @@ namespace InterestOrganiser.ViewModels
         {
             movieDB = DependencyService.Get<IMovieDB>();
             firebase = DependencyService.Get<IFirebase>();
+            bookApi = DependencyService.Get<IBookApi>();
+
             SearchItems = new ObservableCollection<SearchItem>();
             SearchItemsDisplay = new ObservableRangeCollection<SearchItem>();
 
@@ -119,13 +122,14 @@ namespace InterestOrganiser.ViewModels
             IsBusy = true;
             List<SearchItem> movies = await movieDB.SearchMovie(text);
             List<SearchItem> tv = await movieDB.SearchTV(text);
+            List<SearchItem> books = await bookApi.SearchBooks(text);
 
-            List<SearchItem> concat = movies.Concat(tv).OrderBy(x => x.ID).ToList();
+            List<SearchItem> concat = movies.Concat(tv).Concat(books).OrderBy(x => x.Title).ToList();
 
             if (concat.Any())
             {
                 SearchItems.Clear();
-                foreach (SearchItem item in movies)
+                foreach (SearchItem item in concat)
                     SearchItems.Add(item);
 
                 SearchItemsDisplay.Clear();

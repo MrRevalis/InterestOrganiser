@@ -24,8 +24,8 @@ namespace InterestOrganiser.ViewModels
             }
         }
 
-        private int id;
-        public int ID
+        private string id;
+        public string ID
         {
             get => id;
             set {
@@ -63,6 +63,7 @@ namespace InterestOrganiser.ViewModels
         }
 
         private IMovieDB movieDB;
+        private IBookApi bookApi;
         public DetailItem Item { get; set; }
         public ICommand Refresh { get; }
         public ICommand AddRealised { get; }
@@ -71,6 +72,7 @@ namespace InterestOrganiser.ViewModels
         public DetailViewModel()
         {
             movieDB = DependencyService.Get<IMovieDB>();
+            bookApi = DependencyService.Get<IBookApi>();
             Refresh = new Command(async () => await ExecuteLoadItem());
 
             ItemRealised = false;
@@ -99,6 +101,7 @@ namespace InterestOrganiser.ViewModels
             {
                 case "movie": item = await movieDB.MovieDetail(ID); break;
                 case "tv": item = await movieDB.TvDetail(ID); break;
+                case "book": item = await bookApi.GetBook(ID);break;
             }
 
             if(item != null)
@@ -106,13 +109,17 @@ namespace InterestOrganiser.ViewModels
                 Item = item;
                 OnPropertyChanged(nameof(Item));
             }
+            else
+            {
+                await Shell.Current.GoToAsync("//main");
+            }
 
             IsBusy = false;
         }
 
         private void ItemType()
         {
-            switch (Type)
+            switch (Type.ToLower())
             {
                 case "movie":
                     Realise = "To watch";
@@ -121,6 +128,10 @@ namespace InterestOrganiser.ViewModels
                 case "tv":
                     Realise = "To watch";
                     Realised = "Watched";
+                    break;
+                case "book":
+                    Realise = "To read";
+                    Realised = "Read";
                     break;
             }
         }
