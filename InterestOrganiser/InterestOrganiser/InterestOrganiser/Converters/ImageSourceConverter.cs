@@ -14,7 +14,7 @@ namespace InterestOrganiser.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value == null)
-                return null;
+                return ImageSource.FromResource("InterestOrganiser.Resources.Images.defaultCover.jpg");
             try
             {
                 var byteArray = Client.DownloadData(value.ToString());
@@ -22,7 +22,7 @@ namespace InterestOrganiser.Converters
             }
             catch
             {
-                return null;
+                return ImageSource.FromResource("InterestOrganiser.Resources.Images.defaultCover.jpg");
             }
         }
 

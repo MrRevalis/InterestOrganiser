@@ -10,6 +10,7 @@ namespace InterestOrganiser
             InitializeComponent();
 
             Routing.RegisterRoute("detail", typeof(DetailPage));
+            Routing.RegisterRoute("detailbook", typeof(BookDetailPage));
             Routing.RegisterRoute("registration", typeof(RegistrationPage));
         }
 

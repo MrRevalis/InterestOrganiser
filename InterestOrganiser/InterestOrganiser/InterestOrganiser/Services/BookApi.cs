@@ -22,19 +22,15 @@ namespace InterestOrganiser.Services
             });
         }
 
-        public async Task<DetailItem> GetBook(string id)
+        public async Task<BookDetail> GetBook(string id)
         {
             var res = await booksService.Volumes.Get(id).ExecuteAsync();
             if(res != null)
             {
-                return new DetailItem
+                return new BookDetail
                 {
-                    Title = res.VolumeInfo.Title,
-                    VoteAverage = (double)res.VolumeInfo.AverageRating,
-                    Release = res.VolumeInfo.PublishedDate,
-                    Poster = res.VolumeInfo.ImageLinks.Thumbnail,
-                    Genres = res.VolumeInfo.Categories[0],
-                    Overview = res.VolumeInfo.Description
+                    ID = res.Id,
+                    Book = res.VolumeInfo
                 };
             }
             return null;

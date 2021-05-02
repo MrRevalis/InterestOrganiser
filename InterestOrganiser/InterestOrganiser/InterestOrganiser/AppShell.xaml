@@ -15,7 +15,7 @@
 
     <TabBar Route="main">
         <Tab
-            Title="Main"
+            Title="Discover"
             Icon="icon_about.png">
             <ShellContent 
                 ContentTemplate="{DataTemplate local:MainPage}" />

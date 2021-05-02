@@ -101,7 +101,6 @@ namespace InterestOrganiser.ViewModels
             {
                 case "movie": item = await movieDB.MovieDetail(ID); break;
                 case "tv": item = await movieDB.TvDetail(ID); break;
-                case "book": item = await bookApi.GetBook(ID);break;
             }
 
             if(item != null)
@@ -128,10 +127,6 @@ namespace InterestOrganiser.ViewModels
                 case "tv":
                     Realise = "To watch";
                     Realised = "Watched";
-                    break;
-                case "book":
-                    Realise = "To read";
-                    Realised = "Read";
                     break;
             }
         }

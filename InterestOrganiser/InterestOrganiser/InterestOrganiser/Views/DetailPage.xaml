@@ -4,6 +4,7 @@
              xmlns:vm="clr-namespace:InterestOrganiser.ViewModels"
              xmlns:pv="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView" 
              xmlns:cm="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:cv="clr-namespace:InterestOrganiser.Converters"
              x:Class="InterestOrganiser.Views.DetailPage"
              x:Name="mainPage"
              Title="{Binding Item.Title}">
@@ -11,6 +12,12 @@
     <ContentPage.BindingContext>
         <vm:DetailViewModel/>
     </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <cv:ImageSourceConverter x:Key="ImageSourceConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     
     <ContentPage.Content>
         <Grid>
@@ -42,7 +49,7 @@
                             <Image
                                 Grid.Row="0"
                                 Margin="5"
-                                Source="{Binding Item.Poster}"/>
+                                Source="{Binding Item.Poster, Converter={StaticResource ImageSourceConverter}}"/>
                         </Grid>
                         <Label
                             Text="{Binding Item.Title}"
@@ -50,8 +57,7 @@
                             Margin="5"
                             HorizontalTextAlignment="Center"/>
                         <Grid
-                            BackgroundColor="#DC2424"
-                            Padding="10">
+                            BackgroundColor="#DC2424">
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
                                 <RowDefinition/>
@@ -66,6 +72,7 @@
                                 TextColor="White"
                                 FontSize="Medium"
                                 HorizontalTextAlignment="Center"
+                                Padding="5"
                                 Grid.Row="0"
                                 Grid.Column="0"
                                 Text="{Binding Item.Release}"/>
@@ -73,6 +80,7 @@
                                 TextColor="White"
                                 FontSize="Medium"
                                 HorizontalTextAlignment="Start"
+                                Padding="5"
                                 Grid.Row="0"
                                 Grid.Column="1"
                                 Text="{Binding Item.Runtime}"/>
@@ -86,11 +94,11 @@
                         </Grid>
                         <Label
                             Text="Description"
-                            Margin="5"
+                            Margin="5, 1"
                             FontSize="Subtitle"/>
                         <Label
                             Margin="5, 0, 5, 5"
-                            FontSize="Body"
+                            FontSize="20"
                             Text="{Binding Item.Overview}"/>
                     </StackLayout>
                 </ScrollView>
@@ -99,21 +107,17 @@
             <pv:PancakeView
                 Grid.Row="0"
                 HorizontalOptions="End"
-                VerticalOptions="End"
+                VerticalOptions="Start"
                 Margin="10"
                 CornerRadius="40"
                 BackgroundColor="Black"
                 Padding="20">
-                <cm:Expander
-                    Rotation="180"
-                    HorizontalOptions="Start"
-                    VerticalOptions="End">
+                <cm:Expander>
                     <cm:Expander.Header>
                         <Image
                             Source="ic_action_add.png"
                             WidthRequest="30"
-                            HeightRequest="30"
-                            Rotation="180">
+                            HeightRequest="30">
                             <Image.Triggers>
                                 <DataTrigger TargetType="Image"
                                              Binding="{Binding Source={RelativeSource AncestorType={x:Type cm:Expander}}, Path=IsExpanded}"
@@ -124,7 +128,7 @@
                         </Image>
                     </cm:Expander.Header>
                     <StackLayout
-                        Rotation="180">
+                        Margin="0, 10, 0, 0">
                         <StackLayout
                             Margin="0, 5">
                             <ImageButton

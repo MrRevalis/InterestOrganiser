@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:InterestOrganiser.ViewModels"
+             xmlns:cv="clr-namespace:InterestOrganiser.Converters"
+             xmlns:cu="clr-namespace:InterestOrganiser.Custom"
+             x:Class="InterestOrganiser.Views.BookDetailPage">
+
+    <ContentPage.BindingContext>
+        <vm:BookDetailViewModel/>
+    </ContentPage.BindingContext>
+    
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <cv:ImageSourceConverter x:Key="ImageSourceConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
+    <ContentPage.Content>
+        <RefreshView
+            Margin="5">
+            <ScrollView>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="260"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Image
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Aspect="Fill"
+                        Source="{Binding Book.Book.ImageLinks.Thumbnail, Converter={StaticResource ImageSourceConverter}}"/>
+
+                    <Grid
+                        Grid.Row="0"
+                        Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Label
+                            Grid.Row="0"
+                            Grid.ColumnSpan="2"
+                            FontSize="Large"
+                            HorizontalTextAlignment="Center"
+                            FontAttributes="Bold"
+                            Text="{Binding Book.Book.Title}"/>
+                        <Label
+                            Grid.Row="1"
+                            Grid.ColumnSpan="2"
+                            VerticalOptions="Start">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Author: "/>
+                                    <Span Text="{Binding Book.Book.Authors[0]}" FontAttributes="Bold"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <cu:RatingBar
+                            Grid.Row="2" 
+                            Grid.ColumnSpan="2"
+                            VerticalOptions="Start"
+                            HorizontalOptions="Center"
+                            ImageWidth="20"
+                            ImageHeight="20"
+                            StarsAmount="{Binding Book.Book.AverageRating}"/>
+                        <Button
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            Text="To read"/>
+                        <Button
+                            Grid.Row="3"
+                            Grid.Column="1"
+                            Text="Read"/>
+                    </Grid>
+
+                </Grid>
+            </ScrollView>
+        </RefreshView>
+        
+    </ContentPage.Content>
+</ContentPage>

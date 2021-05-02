@@ -159,7 +159,10 @@ namespace InterestOrganiser.ViewModels
             if (obj == null)
                 return;
 
-            await Shell.Current.GoToAsync($"detail?type={obj.Type}&id={obj.ID}");
+            if(obj.Type.Equals("book"))
+                await Shell.Current.GoToAsync($"detailbook?id={obj.ID}");
+            else
+                await Shell.Current.GoToAsync($"detail?type={obj.Type}&id={obj.ID}");
         }
     }
 }
