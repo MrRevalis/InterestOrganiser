@@ -16,7 +16,7 @@ namespace InterestOrganiser.Droid
         {
             base.OnCreate(savedInstanceState);
 
-            this.SetStatusBarColor(Xamarin.Forms.Color.FromHex("000000").ToAndroid());
+            this.SetStatusBarColor(Xamarin.Forms.Color.FromHex("1b242c").ToAndroid());
 
 
             var options = new FirebaseOptions.Builder()

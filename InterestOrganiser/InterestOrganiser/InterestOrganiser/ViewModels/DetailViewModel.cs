@@ -99,8 +99,8 @@ namespace InterestOrganiser.ViewModels
             DetailItem item = null;
             switch (Type.ToLower())
             {
-                case "movie": item = await movieDB.MovieDetail(ID); break;
-                case "tv": item = await movieDB.TvDetail(ID); break;
+                case "movies": item = await movieDB.MovieDetail(ID); break;
+                case "tv series": item = await movieDB.TvDetail(ID); break;
             }
 
             if(item != null)

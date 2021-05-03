@@ -3,16 +3,28 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="InterestOrganiser.Theme.DarkTheme">
-    
-    <Color x:Key="PrimaryColor">#383838</Color>
-    <Color x:Key="AccentColor">#878787</Color>
-    <Color x:Key="SecondaryColor">White</Color>
 
-    <Color x:Key="PageBackgroundColor">White</Color>
-    <Color x:Key="NavigationBarColor">#383838</Color>
+    <Color x:Key="charcoalColor">#424c55</Color>
+    <Color x:Key="charcoalLightColor">#6d7881</Color>
+    <Color x:Key="charcoalDarkColor">#1b242c</Color>
 
-    <Color x:Key="PrimaryTextColor">Black</Color>
-    <Color x:Key="SecondaryTextColor">#4a4a4a</Color>
-    <Color x:Key="TertiaryTextColor">#7d7d7d</Color>
+    <Color x:Key="fuzzyColor">#c1666b</Color>
+    <Color x:Key="fuzzyLightColor">#f69599</Color>
+    <Color x:Key="fuzzyDarkColor">#8e3940</Color>
+
+    <Color x:Key="timberwolfColor">#e4dfda</Color>
+    <Color x:Key="timberwolfLightColor">#ffffff</Color>
+    <Color x:Key="timberwolfDarkColor">#b2ada8</Color>
+
+    <Color x:Key="burlywoodColor">#d4b483</Color>
+    <Color x:Key="burlywoodLightColor">#ffe6b3</Color>
+    <Color x:Key="burlywoodDarkColor">#a18456</Color>
+
+    <Color x:Key="blueColor">#50808e</Color>
+    <Color x:Key="blueLightColor">#7fafbe</Color>
+    <Color x:Key="blueDarkColor">#215461</Color>
     
+    <Color x:Key="PrimaryTextColor">#ffffff</Color>
+    <Color x:Key="SecondaryTextColor">#000000</Color>
+
 </ResourceDictionary>

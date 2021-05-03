@@ -18,19 +18,6 @@
         </OnPlatform>
     </ContentPage.Padding>
 
-    <ContentPage.Resources>
-        <LinearGradientBrush 
-            x:Key="Gradient"
-            StartPoint="0,0"
-            EndPoint="1,1">
-            <GradientStop
-                Color="#DC2424"
-                Offset="0.2"/>
-            <GradientStop
-                Color="#4A569D"
-                Offset="1.0"/>
-        </LinearGradientBrush>
-    </ContentPage.Resources>
     
     <ContentPage.Content>
         <Grid>
@@ -43,7 +30,7 @@
                     Height="60"/>
             </Grid.RowDefinitions>
             <Frame
-                Background="{StaticResource Gradient}"
+                BackgroundColor="{StaticResource charcoalDarkColor}"
                 Grid.Row="0">
                 <Label
                     Text="Organiser"
@@ -80,6 +67,8 @@
                 <Button
                     Text="Login"
                     Command="{Binding Login}"
+                    HorizontalOptions="Center"
+                    BorderRadius="15"
                     Grid.Row="2">
                     <Button.Triggers>
                         <DataTrigger
@@ -92,10 +81,8 @@
                 </Button>
             </Grid>
             <StackLayout
+                BackgroundColor="{StaticResource charcoalDarkColor}"
                 Grid.Row="2">
-                <Label
-                    HeightRequest="1"
-                    BackgroundColor="LightGray"/>
                 <Label
                     Text="Create new account"
                     FontSize="Body"

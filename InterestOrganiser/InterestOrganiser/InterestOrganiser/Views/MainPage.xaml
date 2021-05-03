@@ -25,12 +25,15 @@
             <cv:ImageSourceConverter x:Key="ImageSourceConverter"/>
             <cv:ItemTypeToVisibility x:Key="ItemTypeToVisibility"/>
             <cv:BookCollectionViewConverter x:Key="BookCollectionViewConverter"/>
+            <cv:LabelClickedConverter x:Key="LabelClickedConverter"/>
+            <xct:ItemSelectedEventArgsConverter x:Key="ItemSelectedEventArgsConverter"/>
         </ResourceDictionary>
     </ContentPage.Resources>
     
     <ContentPage.Content>
         <Grid>
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
@@ -46,7 +49,47 @@
             </SearchBar>
 
             <CollectionView
-                Grid.Row="1"
+                ItemsSource="{Binding TypesList}"
+                ItemsLayout="HorizontalList"
+                SelectedItem="{Binding Type}"
+                SelectionChangedCommand="{Binding SelectedType}"
+                SelectionChangedCommandParameter="{Binding Type}"
+                SelectionMode="Single"
+                HeightRequest="40"
+                Grid.Row="1">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout>
+                            <Label
+                                x:Name="typeLabel"
+                                Margin="15, 0"
+                                FontSize="Medium"
+                                VerticalTextAlignment="Center"
+                                Text="{Binding .}"/>
+                            <BoxView
+                                HeightRequest="5"
+                                HorizontalOptions="FillAndExpand"
+                                BackgroundColor="{Binding Source={x:Reference mainPage}, Path=BindingContext.Type, Converter={StaticResource LabelClickedConverter}, ConverterParameter={x:Reference Name=typeLabel}}">
+                            </BoxView>
+
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup Name="CommonStates">
+                                    <VisualState Name="Normal"/>
+                                    <VisualState Name="Selected">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor" Value="#215461"/>
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                
+            </CollectionView>
+            
+            <CollectionView
+                Grid.Row="2"
                 Margin="5"
                 ItemsSource="{Binding SearchItemsDisplay}"
                 ItemSizingStrategy="MeasureAllItems"
@@ -114,7 +157,7 @@
                                         WidthRequest="100">
                                         <BoxView
                                             CornerRadius="0,10,0,10"
-                                            Color="#4A569D"
+                                            Color="{StaticResource timberwolfDarkColor}"
                                             Grid.RowSpan="2"/>
                                         <Image
                                             VerticalOptions="Center"
@@ -144,7 +187,8 @@
                                     IsVisible="{Binding Type, Converter={StaticResource ItemTypeToVisibility}}"
                                     Padding="0"
                                     CornerRadius="10" 
-                                    HasShadow="True">
+                                    HasShadow="True"
+                                    BackgroundColor="{StaticResource burlywoodDarkColor}">
                                     <Grid
                                         HorizontalOptions="FillAndExpand"
                                         VerticalOptions="FillAndExpand">
@@ -169,7 +213,7 @@
                                             FontSize="Large"
                                             Margin="5"
                                             Text="{Binding Title}"
-                                            HorizontalTextAlignment="Center" />
+                                            HorizontalTextAlignment="Center"/>
                                     </Grid>
                                     <Frame.GestureRecognizers>
                                         <TapGestureRecognizer
@@ -222,7 +266,7 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
             <ActivityIndicator
-                Grid.Row="1"
+                Grid.Row="2"
                 IsRunning="{Binding IsBusy}"
                 HorizontalOptions="Center"
                 VerticalOptions="Center"

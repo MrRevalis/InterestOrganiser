@@ -6,19 +6,21 @@ using Xamarin.Forms;
 
 namespace InterestOrganiser.Converters
 {
-    public class BookCollectionViewConverter : IValueConverter
+    public class LabelClickedConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value == null)
-                return false;
+                return null;
 
-            string type = value.ToString();
-            switch (type)
+            string type = value as string;
+            Label label = parameter as Label;
+            if (type.Equals(label.Text))
             {
-                case "books": return true;
-                default: return false;
+                return Color.FromHex("8e3940");
             }
+            else
+                return Color.FromHex("215461");
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

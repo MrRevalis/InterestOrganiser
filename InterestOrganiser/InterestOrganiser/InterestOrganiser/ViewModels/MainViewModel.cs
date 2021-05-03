@@ -21,7 +21,7 @@ namespace InterestOrganiser.ViewModels
         public ICommand SearchChanged { get; }
         public ICommand TrendingList { get; }
         public ICommand LoadMoreItems { get; }
-        public List<TestItem> ItemList { get; set; }
+        public ICommand SelectedType { get; }
         public ObservableCollection<SearchItem> SearchItems { get; set; }
         private ObservableRangeCollection<SearchItem> searchItemsDisplay;
         public ObservableRangeCollection<SearchItem> SearchItemsDisplay
@@ -29,6 +29,21 @@ namespace InterestOrganiser.ViewModels
             get => searchItemsDisplay;
             set => SetProperty(ref searchItemsDisplay, value);
         }
+
+        private List<SearchItem> entireCollection;
+        public List<SearchItem> EntireCollection
+        {
+            get => entireCollection;
+            set => SetProperty(ref entireCollection, value);
+        }
+
+        private string type = "ALL";
+        public string Type
+        {
+            get => type;
+            set => SetProperty(ref type, value);
+        }
+        public ObservableCollection<string> TypesList { get; set; }
 
         private IMovieDB movieDB;
         private IFirebase firebase;
@@ -49,21 +64,22 @@ namespace InterestOrganiser.ViewModels
             TrendingList = new Command(async () => await TrendingItems());
             Task.Run(() => TrendingItems());
 
-            ItemList = new List<TestItem>()
-            {
-                new TestItem(){Name = "Item 1", Image = "https://cdn.statically.io/img/c4.wallpaperflare.com/wallpaper/65/969/298/danmachi-is-it-wrong-to-try-to-pick-up-girls-in-a-dungeon-bell-cranel-hestia-danmachi-liliruca-arde-hd-wallpaper-preview.jpg"},
-                new TestItem(){Name = "Item 2", Image = "https://cdn.statically.io/img/c4.wallpaperflare.com/wallpaper/65/969/298/danmachi-is-it-wrong-to-try-to-pick-up-girls-in-a-dungeon-bell-cranel-hestia-danmachi-liliruca-arde-hd-wallpaper-preview.jpg"},
-                new TestItem(){Name = "Item 3", Image = "https://cdn.statically.io/img/c4.wallpaperflare.com/wallpaper/65/969/298/danmachi-is-it-wrong-to-try-to-pick-up-girls-in-a-dungeon-bell-cranel-hestia-danmachi-liliruca-arde-hd-wallpaper-preview.jpg"},
-                new TestItem(){Name = "Item 4", Image = "https://cdn.statically.io/img/c4.wallpaperflare.com/wallpaper/65/969/298/danmachi-is-it-wrong-to-try-to-pick-up-girls-in-a-dungeon-bell-cranel-hestia-danmachi-liliruca-arde-hd-wallpaper-preview.jpg"},
-                new TestItem(){Name = "Item 5", Image = "https://cdn.statically.io/img/c4.wallpaperflare.com/wallpaper/65/969/298/danmachi-is-it-wrong-to-try-to-pick-up-girls-in-a-dungeon-bell-cranel-hestia-danmachi-liliruca-arde-hd-wallpaper-preview.jpg"}
-            };
-
             NavToDetail = new Command<SearchItem>(Navigate);
             AddToRealised = new Command<SearchItem>(async (sender) => await Realised(sender));
             AddToRealise = new Command<SearchItem>(async (sender) => await Realise(sender));
             SearchChanged = new Command<string>(async (sender) => await Search(sender));
             LoadMoreItems = new Command(LoadMore);
             Logout = new Command(LogoutUser);
+            TypesList = new ObservableCollection<string>() { "ALL", "MOVIES", "TV SERIES", "BOOKS", "GAMES" };
+
+
+            SelectedType = new Command<string>(async (sender) => await TypeChanged(sender));
+        }
+
+        private async Task TypeChanged(string sender)
+        {
+            Type = sender;
+            await ChangeCollectionType(Type.ToLower());
         }
 
         private void LoadMore()
@@ -90,18 +106,29 @@ namespace InterestOrganiser.ViewModels
             List<SearchItem> trending = await movieDB.TrendingList("all", "week");
             if (trending != null && trending.Any())
             {
-                SearchItems.Clear();
-                foreach (SearchItem item in trending)
-                    SearchItems.Add(item);
+                EntireCollection = trending;
 
-                SearchItemsDisplay.Clear();
-                var itemsNumber = trending.Count < batchSize ? trending.Count : batchSize;
-                for (int i = 0; i < itemsNumber; i++)
+                if (Type.ToLower().Equals("all"))
                 {
-                    SearchItemsDisplay.Add(trending[i]);
+                    SearchItems.Clear();
+                    foreach (SearchItem item in trending)
+                        SearchItems.Add(item);
+
+                    SearchItemsDisplay.Clear();
+                    var itemsNumber = trending.Count < batchSize ? trending.Count : batchSize;
+                    for (int i = 0; i < itemsNumber; i++)
+                    {
+                        SearchItemsDisplay.Add(trending[i]);
+                    }
+                    currentItemsIndex = itemsNumber;
                 }
-                currentItemsIndex = itemsNumber;
+                else
+                {
+                    await ChangeCollectionType(Type.ToLower());
+                }
+                
             }
+            OnPropertyChanged(nameof(Type));
             IsBusy = false;
         }
 
@@ -128,17 +155,27 @@ namespace InterestOrganiser.ViewModels
 
             if (concat.Any())
             {
-                SearchItems.Clear();
-                foreach (SearchItem item in concat)
-                    SearchItems.Add(item);
+                EntireCollection = concat;
 
-                SearchItemsDisplay.Clear();
-                var itemsNumber = movies.Count < batchSize ? movies.Count : batchSize;
-                for (int i = 0; i < itemsNumber; i++)
+                if (Type.ToLower().Equals("all"))
                 {
-                    SearchItemsDisplay.Add(movies[i]);
+                    SearchItems.Clear();
+                    foreach (SearchItem item in concat)
+                        SearchItems.Add(item);
+
+                    SearchItemsDisplay.Clear();
+                    var itemsNumber = movies.Count < batchSize ? movies.Count : batchSize;
+                    for (int i = 0; i < itemsNumber; i++)
+                    {
+                        SearchItemsDisplay.Add(movies[i]);
+                    }
+                    currentItemsIndex = itemsNumber;
                 }
-                currentItemsIndex = itemsNumber;
+                else
+                {
+                    await ChangeCollectionType(Type.ToLower());
+                }
+                
             }
             IsBusy = false;
         }
@@ -159,10 +196,48 @@ namespace InterestOrganiser.ViewModels
             if (obj == null)
                 return;
 
-            if(obj.Type.Equals("book"))
+            if(obj.Type.Equals("books"))
                 await Shell.Current.GoToAsync($"detailbook?id={obj.ID}");
             else
                 await Shell.Current.GoToAsync($"detail?type={obj.Type}&id={obj.ID}");
+        }
+
+        private async Task ChangeCollectionType(string type)
+        {
+            SearchItemsDisplay.Clear();
+
+            if (type.Equals("all"))
+            {
+                var itemsNumber = EntireCollection.Count < batchSize ? EntireCollection.Count : batchSize;
+                SearchItems.Clear();
+                foreach (var x in EntireCollection)
+                {
+                    SearchItems.Add(x);
+                }
+
+                for (int i = 0; i < itemsNumber; i++)
+                {
+                    SearchItemsDisplay.Add(EntireCollection[i]);
+                }
+                currentItemsIndex = itemsNumber;
+            }
+            else
+            {
+                List<SearchItem> typesCollection = EntireCollection.Select(x => x).Where(x => x.Type.Equals(type)).ToList();
+                var itemsNumber = typesCollection.Count < batchSize ? typesCollection.Count : batchSize;
+
+                SearchItems.Clear();
+                foreach (var x in typesCollection)
+                {
+                    SearchItems.Add(x);
+                }
+
+                for (int i = 0; i < itemsNumber; i++)
+                {
+                    SearchItemsDisplay.Add(typesCollection[i]);
+                }
+                currentItemsIndex = itemsNumber;
+            }
         }
     }
 }

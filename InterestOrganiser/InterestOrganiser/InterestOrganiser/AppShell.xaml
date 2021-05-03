@@ -5,9 +5,7 @@
        Title="InterestOrganiser"
        FlyoutBehavior="Disabled"
        x:Class="InterestOrganiser.AppShell">
-
-
-
+    
     <ShellItem Route="login">
         <ShellContent
             ContentTemplate="{DataTemplate local:LoginPage}"/>

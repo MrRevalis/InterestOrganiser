@@ -29,7 +29,7 @@ namespace InterestOrganiser.Behaviors
             Regex emailPattern = new Regex(@"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$");
 
             if (emailPattern.IsMatch(email)){
-                entry.TextColor = Color.Black;
+                entry.TextColor = Color.White;
             }
             else
             {

@@ -39,9 +39,9 @@
                         Grid.Row="0"
                         Grid.Column="1">
                         <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
@@ -77,10 +77,12 @@
                         <Button
                             Grid.Row="3"
                             Grid.Column="0"
+                            VerticalOptions="End"
                             Text="To read"/>
                         <Button
                             Grid.Row="3"
                             Grid.Column="1"
+                            VerticalOptions="End"
                             Text="Read"/>
                     </Grid>
 

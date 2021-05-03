@@ -16,9 +16,9 @@ namespace InterestOrganiser.Converters
             string type = value.ToString();
             switch (type)
             {
-                case "movie": return true;
-                case "tv": return true;
-                case "book": return false;
+                case "movies": return true;
+                case "tv series": return true;
+                case "books": return false;
                 default: return false;
             }
         }

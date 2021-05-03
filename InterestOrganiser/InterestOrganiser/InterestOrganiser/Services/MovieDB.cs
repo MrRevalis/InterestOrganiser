@@ -65,7 +65,7 @@ namespace InterestOrganiser.Services
                     List<SearchItem> movies = movieResponse.results.Select(x => new SearchItem
                     {
                         ID = x.id.ToString(),
-                        Type = "movie",
+                        Type = "movies",
                         Title = x.title,
                         Background = imageSource + x.backdrop_path,
                     }).ToList();
@@ -88,7 +88,7 @@ namespace InterestOrganiser.Services
                     List<SearchItem> movies = movieResponse.results.Select(x => new SearchItem
                     {
                         ID = x.id.ToString(),
-                        Type = "tv",
+                        Type = "tv series",
                         Title = x.name,
                         Background = imageSource + x.backdrop_path,
                     }).ToList();
@@ -111,7 +111,7 @@ namespace InterestOrganiser.Services
                     List<SearchItem> movies = movieResponse.results.Select(x => new SearchItem
                     {
                         ID = x.id.ToString(),
-                        Type = x.media_type,
+                        Type = x.media_type == "movie" ? "movies" : "tv series",
                         Title = x.title ?? x.name,
                         Background = imageSource + x.backdrop_path,
                     }).ToList();

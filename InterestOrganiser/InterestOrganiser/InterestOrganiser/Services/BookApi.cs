@@ -45,7 +45,7 @@ namespace InterestOrganiser.Services
                 var books = res.Items.Select(x => new SearchItem
                 {
                     ID = x.Id,
-                    Type = "book",
+                    Type = "books",
                     Title = x.VolumeInfo.Title,
                     Background = x.VolumeInfo.ImageLinks != null ? x.VolumeInfo.ImageLinks.Thumbnail : ""
                 }).ToList();
