@@ -26,7 +26,7 @@
             </Style>
 
             <Style TargetType="ContentPage" ApplyToDerivedTypes="True">
-                <Setter Property="BackgroundColor" Value="{StaticResource blueDarkColor}"/>
+                <Setter Property="BackgroundColor" Value="{StaticResource charcoalDarkColor}"/>
             </Style>
 
             <Style TargetType="SearchBar">
@@ -44,7 +44,11 @@
                 <Setter Property="WidthRequest" Value="180"/>
                 <Setter Property="HeightRequest" Value="40"/>
             </Style>
-
+            
+            <Style TargetType="Label" x:Key="ErrorTextStyle">
+                <Setter Property="TextColor" Value="Red"/>
+                <Setter Property="FontSize" Value="12"/>
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
     

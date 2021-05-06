@@ -17,6 +17,7 @@ namespace InterestOrganiser.Converters
             switch (type)
             {
                 case "books": return true;
+                case "games": return true;
                 default: return false;
             }
         }

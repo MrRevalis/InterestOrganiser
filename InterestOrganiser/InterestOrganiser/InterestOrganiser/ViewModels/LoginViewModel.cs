@@ -14,8 +14,8 @@ namespace InterestOrganiser.ViewModels
     {
         public ICommand Login { get; }
         public ICommand Register { get; }
-        public string Email { get; set; }
-        public string Password { get; set; }
+        public string Email { get; set; } = "dominikr26@interia.pl";
+        public string Password { get; set; } = "123456";
 
         private IFirebase auth;
 

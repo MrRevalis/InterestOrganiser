@@ -4,6 +4,7 @@
              xmlns:vm="clr-namespace:InterestOrganiser.ViewModels"
              xmlns:pv="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView" 
              xmlns:cm="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:cu="clr-namespace:InterestOrganiser.Custom"
              xmlns:cv="clr-namespace:InterestOrganiser.Converters"
              x:Class="InterestOrganiser.Views.DetailPage"
              x:Name="mainPage"
@@ -33,7 +34,7 @@
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition
-                                    Height="200"/>
+                                    Height="230"/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition
@@ -51,143 +52,125 @@
                                 Margin="5"
                                 Source="{Binding Item.Poster, Converter={StaticResource ImageSourceConverter}}"/>
                         </Grid>
-                        <Label
-                            Text="{Binding Item.Title}"
-                            FontSize="Title"
-                            Margin="5"
-                            HorizontalTextAlignment="Center"/>
-                        <Grid
-                            BackgroundColor="#DC2424">
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition
-                                    Width="80*"/>
-                                <ColumnDefinition
-                                    Width="20*"/>
-                            </Grid.ColumnDefinitions>
+                        <StackLayout Margin="10">
+                            <StackLayout Orientation="Horizontal" HorizontalOptions="Start">
+                                <StackLayout>
+                                    <ImageButton
+                                        Source="ic_action_check_box_outline_blank.png"
+                                        WidthRequest="30"
+                                        HeightRequest="30"
+                                        BackgroundColor="Transparent"
+                                        Command="{Binding AddToRealise}">
+                                        <ImageButton.Triggers>
+                                            <DataTrigger
+                                                TargetType="ImageButton"
+                                                Binding="{Binding ItemToRealise}"
+                                                Value="True">
+                                                <Setter Property="Source" Value="ic_action_check_box_todo.png"/>
+                                            </DataTrigger>
+                                        </ImageButton.Triggers>
+                                        <ImageButton.GestureRecognizers>
+                                            <TapGestureRecognizer
+                                                Command="{Binding Source={x:Reference mainPage}, Path=BindingContext.AddToRealise}"/>
+                                        </ImageButton.GestureRecognizers>
+                                    </ImageButton>
+                                </StackLayout>
+
+                                <StackLayout>
+                                    <ImageButton
+                                        Source="ic_action_check_box.png"
+                                        WidthRequest="30"
+                                        HeightRequest="30"
+                                        BackgroundColor="Transparent"
+                                        Command="{Binding AddRealised}">
+                                        <ImageButton.Triggers>
+                                            <DataTrigger
+                                                TargetType="ImageButton"
+                                                Binding="{Binding ItemRealised}"
+                                                Value="True">
+                                                <Setter Property="Source" Value="ic_action_check_box_red.png"/>
+                                            </DataTrigger>
+                                        </ImageButton.Triggers>
+                                    </ImageButton>
+                                </StackLayout>
+                            </StackLayout>
                             <Label
-                                TextColor="White"
-                                FontSize="Medium"
-                                HorizontalTextAlignment="Center"
-                                Padding="5"
-                                Grid.Row="0"
-                                Grid.Column="0"
-                                Text="{Binding Item.Release}"/>
+                                Text="{Binding Item.Title}" FontAttributes="Bold" FontSize="Large" HorizontalOptions="Center"/>
+                            <StackLayout Orientation="Horizontal">
+                                <Label
+                                    Text="{Binding Item.VoteAverage}"
+                                    FontSize="Medium"/>
+                                <cu:RatingBar
+                                    Margin="10, 0, 0, 0"
+                                    ImageWidth="35"
+                                    ImageHeight="35"
+                                    StarsAmount="{Binding Item.VoteStars}"/>
+                            </StackLayout>
+                            <StackLayout Orientation="Horizontal">
+                                <Label
+                                    Text="{Binding Item.Release}"
+                                    FontSize="Medium"/>
+                                <Label
+                                    Text="{Binding Item.Runtime}"
+                                    FontSize="Medium"/>
+                            </StackLayout>
+                            <Label 
+                                Text="{Binding Item.Genres}"
+                                FontSize="Caption"/>
+                            <Label 
+                                Text="{Binding Item.Overview}"
+                                FontSize="Body"/>
                             <Label
-                                TextColor="White"
-                                FontSize="Medium"
-                                HorizontalTextAlignment="Start"
-                                Padding="5"
-                                Grid.Row="0"
-                                Grid.Column="1"
-                                Text="{Binding Item.Runtime}"/>
-                            <Label
-                                TextColor="White"
-                                FontSize="Medium"
-                                HorizontalTextAlignment="Center"
-                                Grid.Row="1"
-                                Grid.ColumnSpan="2"
-                                Text="{Binding Item.Genres}"/>
-                        </Grid>
-                        <Label
-                            Text="Description"
-                            Margin="5, 1"
-                            FontSize="Subtitle"/>
-                        <Label
-                            Margin="5, 0, 5, 5"
-                            FontSize="20"
-                            Text="{Binding Item.Overview}"/>
+                                Text="Cast"
+                                FontSize="Large"/>
+                            <CollectionView
+                                HeightRequest="150"
+                                ItemsSource="{Binding Item.Cast}"
+                                ItemsLayout="HorizontalList">
+
+                                <CollectionView.EmptyView>
+                                    <Label
+                                        HorizontalTextAlignment="Center"
+                                        VerticalTextAlignment="Center"
+                                        Text="Empty list"
+                                        FontSize="Large"/>
+                                </CollectionView.EmptyView>
+                                
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid WidthRequest="85" Margin="10">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="130"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+                                            <Image
+                                                BackgroundColor="Red"
+                                                Grid.Row="0"
+                                                HorizontalOptions="Center"
+                                                VerticalOptions="Center"
+                                                Source="{Binding Image}">
+                                                <Image.Clip>
+                                                    <EllipseGeometry
+                                                        RadiusX="40"
+                                                        RadiusY="40"
+                                                        Center="45,60"/>
+                                                </Image.Clip>
+                                            </Image>
+                                            <Label
+                                                Margin="10, -30"
+                                                HorizontalTextAlignment="Center"
+                                                Grid.Row="1"
+                                                Text="{Binding Name}"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </StackLayout>
                     </StackLayout>
                 </ScrollView>
             </RefreshView>
 
-            <pv:PancakeView
-                Grid.Row="0"
-                HorizontalOptions="End"
-                VerticalOptions="Start"
-                Margin="10"
-                CornerRadius="40"
-                BackgroundColor="Black"
-                Padding="20">
-                <cm:Expander>
-                    <cm:Expander.Header>
-                        <Image
-                            Source="ic_action_add.png"
-                            WidthRequest="30"
-                            HeightRequest="30">
-                            <Image.Triggers>
-                                <DataTrigger TargetType="Image"
-                                             Binding="{Binding Source={RelativeSource AncestorType={x:Type cm:Expander}}, Path=IsExpanded}"
-                                             Value="True">
-                                    <Setter Property="Source" Value="ic_action_close.png"/>
-                                </DataTrigger>
-                            </Image.Triggers>
-                        </Image>
-                    </cm:Expander.Header>
-                    <StackLayout
-                        Margin="0, 10, 0, 0">
-                        <StackLayout
-                            Margin="0, 5">
-                            <ImageButton
-                                Source="ic_action_check_box_outline_blank.png"
-                                WidthRequest="30"
-                                HeightRequest="30"
-                                BackgroundColor="Transparent"
-                                Command="{Binding AddToRealise}">
-                                <ImageButton.Triggers>
-                                    <DataTrigger
-                                        TargetType="ImageButton"
-                                        Binding="{Binding ItemToRealise}"
-                                        Value="True">
-                                        <Setter Property="Source" Value="ic_action_check_box_todo.png"/>
-                                    </DataTrigger>
-                                </ImageButton.Triggers>
-                                <ImageButton.GestureRecognizers>
-                                    <TapGestureRecognizer
-                                        Command="{Binding Source={x:Reference mainPage}, Path=BindingContext.AddToRealise}"/>
-                                </ImageButton.GestureRecognizers>
-                            </ImageButton>
-                            <Label
-                                TextColor="White"
-                                HorizontalTextAlignment="Center"
-                                Text="{Binding Realise}"/>
-                            <StackLayout.GestureRecognizers>
-                                <TapGestureRecognizer
-                                    Command="{Binding Source={x:Reference mainPage}, Path=BindingContext.AddToRealise}"/>
-                            </StackLayout.GestureRecognizers>
-                        </StackLayout>
-                        <StackLayout
-                            Margin="0, 0, 0, 10">
-                            <ImageButton
-                                Source="ic_action_check_box.png"
-                                WidthRequest="30"
-                                HeightRequest="30"
-                                BackgroundColor="Transparent"
-                                Command="{Binding AddRealised}">
-                                <ImageButton.Triggers>
-                                    <DataTrigger
-                                        TargetType="ImageButton"
-                                        Binding="{Binding ItemRealised}"
-                                        Value="True">
-                                        <Setter Property="Source" Value="ic_action_check_box_red.png"/>
-                                    </DataTrigger>
-                                </ImageButton.Triggers>
-                            </ImageButton>
-                            <Label
-                                TextColor="White"
-                                HorizontalTextAlignment="Center"
-                                Text="{Binding Realised}"/>
-                            <StackLayout.GestureRecognizers>
-                                <TapGestureRecognizer
-                                    Command="{Binding Source={x:Reference mainPage}, Path=BindingContext.AddRealised}"/>
-                            </StackLayout.GestureRecognizers>
-                        </StackLayout>
-                    </StackLayout>
-                </cm:Expander>
-            </pv:PancakeView>
+            
             
         </Grid>
     </ContentPage.Content>

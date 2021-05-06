@@ -12,6 +12,7 @@ namespace InterestOrganiser
 
             DependencyService.Register<IMovieDB, MovieDB>();
             DependencyService.Register<IBookApi, BookApi>();
+            DependencyService.Register<IGameApi, GameApi>();
 
             MainPage = new AppShell();
         }

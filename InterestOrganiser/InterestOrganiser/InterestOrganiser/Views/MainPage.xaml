@@ -2,275 +2,153 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:InterestOrganiser.ViewModels"
-             xmlns:md="clr-namespace:InterestOrganiser.Models"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:cv="clr-namespace:InterestOrganiser.Converters"
              x:Class="InterestOrganiser.Views.MainPage"
-             x:Name="mainPage"
-             Title="Discover">
+             x:Name="mainPage">
 
     <ContentPage.BindingContext>
         <vm:MainViewModel/>
     </ContentPage.BindingContext>
-    
-    <ContentPage.ToolbarItems>
-        <ToolbarItem
-            Text="Logout"
-            Icon="ic_action_logout.png"
-            Command="{Binding Logout}"/>
-    </ContentPage.ToolbarItems>
 
     <ContentPage.Resources>
         <ResourceDictionary>
-            <cv:ImageSourceConverter x:Key="ImageSourceConverter"/>
-            <cv:ItemTypeToVisibility x:Key="ItemTypeToVisibility"/>
-            <cv:BookCollectionViewConverter x:Key="BookCollectionViewConverter"/>
             <cv:LabelClickedConverter x:Key="LabelClickedConverter"/>
             <xct:ItemSelectedEventArgsConverter x:Key="ItemSelectedEventArgsConverter"/>
         </ResourceDictionary>
     </ContentPage.Resources>
     
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior
+            EventName="Appearing"
+            Command="{Binding AppearingCommand}"/>
+    </ContentPage.Behaviors>
+    
+    <Shell.TitleView>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <ImageButton Grid.Column="0" Source="ic_action_search.png" HorizontalOptions="Start" BackgroundColor="Transparent" Command="{Binding SearchPageCommand}"/>
+            <Label Grid.Column="1" Text="Discover" HorizontalOptions="Center" VerticalOptions="Center" FontSize="Large"/>
+            <ImageButton Grid.Column="2" Source="ic_action_logout.png" HorizontalOptions="End" BackgroundColor="Transparent" Command="{Binding SignOutCommand}"/>
+        </Grid>
+    </Shell.TitleView>
+    
     <ContentPage.Content>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition/>
+                <RowDefinition Height="45"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <SearchBar
-                Grid.Row="0"
-                x:Name="searchBar">
-                <SearchBar.Behaviors>
-                    <xct:EventToCommandBehavior
-                    EventName="TextChanged"
-                    Command="{Binding SearchChanged}"
-                    CommandParameter="{Binding Text, Source={x:Reference searchBar}}"/>
-                </SearchBar.Behaviors>
-            </SearchBar>
-
-            <CollectionView
-                ItemsSource="{Binding TypesList}"
-                ItemsLayout="HorizontalList"
-                SelectedItem="{Binding Type}"
-                SelectionChangedCommand="{Binding SelectedType}"
-                SelectionChangedCommandParameter="{Binding Type}"
-                SelectionMode="Single"
-                HeightRequest="40"
-                Grid.Row="1">
-                <CollectionView.ItemTemplate>
+            <CarouselView Grid.Row="0" ItemsSource="{Binding TrendingList}" IndicatorView="indicatorView" VerticalOptions="FillAndExpand" HeightRequest="200">
+                <CarouselView.ItemTemplate>
                     <DataTemplate>
-                        <StackLayout>
-                            <Label
-                                x:Name="typeLabel"
-                                Margin="15, 0"
-                                FontSize="Medium"
-                                VerticalTextAlignment="Center"
-                                Text="{Binding .}"/>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Image Source="{Binding Background}" Grid.Row="0" Aspect="Fill"/>
+                            <Label Text="{Binding Title}" Grid.Row="0" VerticalOptions="End" HorizontalOptions="Start" Padding="20" FontSize="Large"/>
+                            
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer 
+                                        Command="{Binding ChangePageCommand, Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}}"
+                                        CommandParameter="{Binding .}"/>
+                            </Grid.GestureRecognizers>
+                        </Grid>
+                    </DataTemplate>
+                </CarouselView.ItemTemplate>
+            </CarouselView>
+            <IndicatorView Grid.Row="0" x:Name="indicatorView" IndicatorsShape="Circle" IndicatorColor="White" SelectedIndicatorColor="{StaticResource greenDark}" VerticalOptions="End" Margin="10"/>
+
+            <CarouselView
+                Grid.Row="1"
+                PeekAreaInsets="150"
+                ItemsSource="{Binding Types}"
+                CurrentItem="{Binding CurrentItemType}"
+                CurrentItemChangedCommand="{Binding ChangeTypeCommand}"
+                CurrentItemChangedCommandParameter="{Binding Source={RelativeSource Self}, Path=CurrentItem}">
+                <CarouselView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Label Text="{Binding .}" VerticalOptions="Center" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Center" x:Name="typeLabel" FontSize="Medium" Grid.Row="0">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={x:Reference mainPage}, Path=BindingContext.ChangeTypeCommand}" CommandParameter="{Binding .}"/>
+                                </Label.GestureRecognizers>
+                            </Label>
                             <BoxView
-                                HeightRequest="5"
-                                HorizontalOptions="FillAndExpand"
-                                BackgroundColor="{Binding Source={x:Reference mainPage}, Path=BindingContext.Type, Converter={StaticResource LabelClickedConverter}, ConverterParameter={x:Reference Name=typeLabel}}">
-                            </BoxView>
-
-                            <VisualStateManager.VisualStateGroups>
-                                <VisualStateGroup Name="CommonStates">
-                                    <VisualState Name="Normal"/>
-                                    <VisualState Name="Selected">
-                                        <VisualState.Setters>
-                                            <Setter Property="BackgroundColor" Value="#215461"/>
-                                        </VisualState.Setters>
-                                    </VisualState>
-                                </VisualStateGroup>
-                            </VisualStateManager.VisualStateGroups>
-                        </StackLayout>
+                                Grid.Row="1"
+                                BackgroundColor="{Binding Source={x:Reference mainPage}, Path=BindingContext.CurrentItemType, Converter={StaticResource LabelClickedConverter}, ConverterParameter={x:Reference Name=typeLabel}}"
+                                HeightRequest="5"/>
+                        </Grid>
                     </DataTemplate>
-                </CollectionView.ItemTemplate>
-                
-            </CollectionView>
-            
-            <CollectionView
-                Grid.Row="2"
-                Margin="5"
-                ItemsSource="{Binding SearchItemsDisplay}"
-                ItemSizingStrategy="MeasureAllItems"
-                RemainingItemsThreshold="3"
-                RemainingItemsThresholdReachedCommand="{Binding LoadMoreItems}">
+                </CarouselView.ItemTemplate>
 
-                <CollectionView.EmptyView>
-                    <Label
-                        Text="No items match your filter."
-                        FontSize="Large"
-                        HorizontalTextAlignment="Center"
-                        VerticalTextAlignment="Center"
-                        HorizontalOptions="CenterAndExpand"
-                        VerticalOptions="CenterAndExpand"/>
-                </CollectionView.EmptyView>
+            </CarouselView>
 
-                <CollectionView.ItemTemplate>
-                    <DataTemplate 
-                        x:DataType="md:SearchItem">
-                        <SwipeView
-                            Padding="5"
-                            Threshold="80">
-                            <SwipeView.LeftItems>
-                                <SwipeItemView
-                                    Command="{Binding Source={x:Reference mainPage}, Path=BindingContext.AddToRealised}"
-                                    CommandParameter="{Binding .}"
-                                    BackgroundColor="Transparent">
-                                    <Grid
-                                        RowDefinitions="Auto,*"
-                                        WidthRequest="100">
+            <SwipeView Grid.Row="2">
 
-                                        <BoxView
-                                            CornerRadius="10,0,10,0"
-                                            Color="#DC2424"
-                                            Grid.RowSpan="2"/>
-                                        <Image
-                                            VerticalOptions="Center"
-                                            HorizontalOptions="Center"
-                                            Margin="0, 72, 0, 0">
-                                            <Image.Source>
-                                                <FontImageSource
-                                                    FontFamily="FontAwesome"
-                                                    Glyph="&#xf46c;"
-                                                    Color="White"/>
-                                            </Image.Source>
-                                        </Image>
-                                        <Label
-                                            Grid.Row="1"
-                                            Text="DONE"
-                                            TextColor="White"
-                                            FontSize="Medium"
-                                            HorizontalOptions="Center"
-                                            VerticalOptions="Center"
-                                            Margin="0, 0, 0, 62"/>
-                                    </Grid>
-                                </SwipeItemView>
-                            </SwipeView.LeftItems>
-                            <SwipeView.RightItems>
-                                <SwipeItemView
-                                    Command="{Binding Source={x:Reference mainPage}, Path=BindingContext.AddToRealise}"
-                                    CommandParameter="{Binding .}"
-                                    BackgroundColor="Transparent">
-                                    <Grid
-                                        RowDefinitions="Auto,*"
-                                        WidthRequest="100">
-                                        <BoxView
-                                            CornerRadius="0,10,0,10"
-                                            Color="{StaticResource timberwolfDarkColor}"
-                                            Grid.RowSpan="2"/>
-                                        <Image
-                                            VerticalOptions="Center"
-                                            HorizontalOptions="Center"
-                                            Margin="0, 72, 0, 0">
-                                            <Image.Source>
-                                                <FontImageSource
-                                                    FontFamily="FontAwesome"
-                                                    Glyph="&#xf328;"
-                                                    Color="White"/>
-                                            </Image.Source>
-                                        </Image>
-                                        <Label
-                                            Grid.Row="1"
-                                            Text="ADD"
-                                            TextColor="White"
-                                            FontSize="Medium"
-                                            HorizontalOptions="Center"
-                                            VerticalOptions="Center"
-                                            Margin="0, 0, 0, 62"/>
-                                    </Grid>
-                                </SwipeItemView>
-                            </SwipeView.RightItems>
+                <SwipeView.LeftItems>
+                    <SwipeItems Mode="Execute" SwipeBehaviorOnInvoked="Auto">
+                        <SwipeItem Command="{Binding SwipeCommand}">
+                            <SwipeItem.CommandParameter>
+                                <x:Int32>-1</x:Int32>
+                            </SwipeItem.CommandParameter>
+                        </SwipeItem>
+                    </SwipeItems>
+                </SwipeView.LeftItems>
 
-                            <Grid>
-                                <Frame
-                                    IsVisible="{Binding Type, Converter={StaticResource ItemTypeToVisibility}}"
-                                    Padding="0"
-                                    CornerRadius="10" 
-                                    HasShadow="True"
-                                    BackgroundColor="{StaticResource burlywoodDarkColor}">
-                                    <Grid
-                                        HorizontalOptions="FillAndExpand"
-                                        VerticalOptions="FillAndExpand">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition
-                                                Height="160"/>
-                                            <RowDefinition
-                                                Height="*"/>
-                                        </Grid.RowDefinitions>
-                                        <Image
-                                            Grid.Row="0"
-                                            Aspect="Fill"
-                                            Source="{Binding Background, Converter={StaticResource ImageSourceConverter}}">
-                                            <Image.GestureRecognizers>
-                                                <TapGestureRecognizer
-                                                    Command="{Binding NavToDetail, Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}}"
-                                                    CommandParameter="{Binding .}"/>
-                                            </Image.GestureRecognizers>
-                                        </Image>
-                                        <Label
-                                            Grid.Row="1"
-                                            FontSize="Large"
-                                            Margin="5"
-                                            Text="{Binding Title}"
-                                            HorizontalTextAlignment="Center"/>
-                                    </Grid>
-                                    <Frame.GestureRecognizers>
-                                        <TapGestureRecognizer
-                                            Command="{Binding NavToDetail, Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}}"
-                                            CommandParameter="{Binding .}"/>
-                                    </Frame.GestureRecognizers>
-                                </Frame>
-                                <Frame
-                                    IsVisible="{Binding Type, Converter={StaticResource BookCollectionViewConverter}}"
-                                    Padding="0"
-                                    CornerRadius="10" 
-                                    HasShadow="True">
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition
-                                                Height="200"/>
-                                        </Grid.RowDefinitions>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition/>
-                                            <ColumnDefinition/>
-                                        </Grid.ColumnDefinitions>
-                                        <Image
-                                            Grid.Row="0"
-                                            Aspect="Fill"
-                                            Source="{Binding Background, Converter={StaticResource ImageSourceConverter}}">
-                                            <Image.GestureRecognizers>
-                                                <TapGestureRecognizer
-                                                    Command="{Binding NavToDetail, Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}}"
-                                                    CommandParameter="{Binding .}"/>
-                                            </Image.GestureRecognizers>
-                                        </Image>
-                                        <Label
-                                            Grid.Row="0"
-                                            Grid.Column="1"
-                                            FontSize="Large"
-                                            Margin="5"
-                                            VerticalTextAlignment="Center"
-                                            Text="{Binding Title}"
-                                            HorizontalTextAlignment="Center" />
-                                    </Grid>
-                                    <Frame.GestureRecognizers>
-                                        <TapGestureRecognizer
-                                            Command="{Binding NavToDetail, Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}}"
-                                            CommandParameter="{Binding .}"/>
-                                    </Frame.GestureRecognizers>
-                                </Frame>
+                <SwipeView.RightItems>
+                    <SwipeItems Mode="Execute" SwipeBehaviorOnInvoked="Auto">
+                        <SwipeItem Command="{Binding SwipeCommand}">
+                            <SwipeItem.CommandParameter>
+                                <x:Int32>1</x:Int32>
+                            </SwipeItem.CommandParameter>
+                        </SwipeItem>
+                    </SwipeItems>
+                </SwipeView.RightItems>
+
+                <CollectionView ItemsSource="{Binding ActualMovies}">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Vertical" Span="2"/>
+                    </CollectionView.ItemsLayout>
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Padding="10">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="260"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Image Source="{Binding Background}" Grid.Row="0" Aspect="Fill"/>
+                                <Label Text="{Binding Title}" FontSize="Body" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Row="1"/>
+
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer 
+                                        Command="{Binding ChangePageCommand, Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}}"
+                                        CommandParameter="{Binding .}"/>
+                                </Grid.GestureRecognizers>
                             </Grid>
-                        </SwipeView>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+
+                </CollectionView>
+            </SwipeView>
+
+
             <ActivityIndicator
-                Grid.Row="2"
                 IsRunning="{Binding IsBusy}"
+                Grid.Row="2"
                 HorizontalOptions="Center"
                 VerticalOptions="Center"
-                Margin="0, 0, 0, 20"
                 InputTransparent="True"/>
         </Grid>
     </ContentPage.Content>

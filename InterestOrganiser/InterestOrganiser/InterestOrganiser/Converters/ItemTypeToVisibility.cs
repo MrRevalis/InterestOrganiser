@@ -19,6 +19,7 @@ namespace InterestOrganiser.Converters
                 case "movies": return true;
                 case "tv series": return true;
                 case "books": return false;
+                case "games": return false;
                 default: return false;
             }
         }

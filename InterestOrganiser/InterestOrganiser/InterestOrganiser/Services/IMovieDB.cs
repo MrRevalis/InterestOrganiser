@@ -1,4 +1,5 @@
 ﻿using InterestOrganiser.Models;
+using MovieBase.Models.MovieDetail;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,5 +15,9 @@ namespace InterestOrganiser.Services
         Task<List<SearchItem>> SearchTV(string title);
         Task<DetailItem> MovieDetail(string ID);
         Task<DetailItem> TvDetail(string ID);
+        Task<List<Genre>> MoviesGenres();
+        Task<List<SearchItem>> MoviesList(int ID);
+        Task<List<CastDetail>> MovieCast(string ID);
+        Task<List<CastDetail>> TvCast(string ID);
     }
 }

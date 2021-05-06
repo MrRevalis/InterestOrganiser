@@ -27,4 +27,6 @@
     <Color x:Key="PrimaryTextColor">#ffffff</Color>
     <Color x:Key="SecondaryTextColor">#000000</Color>
 
+    <Color x:Key="greenDark">#237A57</Color>
+
 </ResourceDictionary>

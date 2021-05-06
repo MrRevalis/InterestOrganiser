@@ -1,8 +1,5 @@
 ﻿using InterestOrganiser.Models;
 using InterestOrganiser.Services;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -13,6 +10,12 @@ namespace InterestOrganiser.ViewModels
     [QueryProperty("ID", "id")]
     public class DetailViewModel : BaseViewModel
     {
+        private IMovieDB movieDB;
+
+        public ICommand Refresh { get; private set; }
+        public ICommand AddRealised { get; private set; }
+        public ICommand AddToRealise { get; private set; }
+
         private string type;
         public string Type
         {
@@ -20,7 +23,6 @@ namespace InterestOrganiser.ViewModels
             set
             {
                 SetProperty(ref type, value);
-                ItemType();
             }
         }
 
@@ -48,39 +50,26 @@ namespace InterestOrganiser.ViewModels
             set => SetProperty(ref itemToRealise, value);
         }
 
-        private string realised;
-        public string Realised
+        private DetailItem item;
+        public DetailItem Item 
         {
-            get => realised;
-            set => SetProperty(ref realised, value);
+            get => item;
+            set => SetProperty(ref item, value);
         }
 
-        private string realise;
-        public string Realise
-        {
-            get => realise;
-            set => SetProperty(ref realise, value);
-        }
-
-        private IMovieDB movieDB;
-        private IBookApi bookApi;
-        public DetailItem Item { get; set; }
-        public ICommand Refresh { get; }
-        public ICommand AddRealised { get; }
-        public ICommand AddToRealise { get; }
 
         public DetailViewModel()
         {
             movieDB = DependencyService.Get<IMovieDB>();
-            bookApi = DependencyService.Get<IBookApi>();
+
+            Item = new DetailItem();
+
             Refresh = new Command(async () => await ExecuteLoadItem());
-
-            ItemRealised = false;
-            ItemToRealise = true;
-
             AddRealised = new Command(async () => await AddRealisedItem());
             AddToRealise = new Command(async () => await AddToRealiseItem());
 
+            ItemRealised = false;
+            ItemToRealise = true;
         }
 
         private async Task AddToRealiseItem()
@@ -96,39 +85,18 @@ namespace InterestOrganiser.ViewModels
         private async Task ExecuteLoadItem()
         {
             IsBusy = true;
-            DetailItem item = null;
+
             switch (Type.ToLower())
             {
-                case "movies": item = await movieDB.MovieDetail(ID); break;
-                case "tv series": item = await movieDB.TvDetail(ID); break;
+                case "movies": Item = await movieDB.MovieDetail(ID); break;
+                case "tv series": Item = await movieDB.TvDetail(ID); break;
             }
 
-            if(item != null)
-            {
-                Item = item;
-                OnPropertyChanged(nameof(Item));
-            }
-            else
-            {
+            if(Item == null)
                 await Shell.Current.GoToAsync("//main");
-            }
 
             IsBusy = false;
         }
 
-        private void ItemType()
-        {
-            switch (Type.ToLower())
-            {
-                case "movie":
-                    Realise = "To watch";
-                    Realised = "Watched";
-                    break;
-                case "tv":
-                    Realise = "To watch";
-                    Realised = "Watched";
-                    break;
-            }
-        }
     }
 }

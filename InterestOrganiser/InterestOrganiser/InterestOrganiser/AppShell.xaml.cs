@@ -9,9 +9,10 @@ namespace InterestOrganiser
         {
             InitializeComponent();
 
+            Routing.RegisterRoute("registration", typeof(RegistrationPage));
             Routing.RegisterRoute("detail", typeof(DetailPage));
             Routing.RegisterRoute("detailbook", typeof(BookDetailPage));
-            Routing.RegisterRoute("registration", typeof(RegistrationPage));
+
         }
 
     }

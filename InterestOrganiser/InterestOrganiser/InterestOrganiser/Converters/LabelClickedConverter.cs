@@ -17,7 +17,7 @@ namespace InterestOrganiser.Converters
             Label label = parameter as Label;
             if (type.Equals(label.Text))
             {
-                return Color.FromHex("8e3940");
+                return Color.FromHex("237A57");
             }
             else
                 return Color.FromHex("215461");
