@@ -19,5 +19,7 @@ namespace InterestOrganiser.Services
         Task<List<SearchItem>> MoviesList(int ID);
         Task<List<CastDetail>> MovieCast(string ID);
         Task<List<CastDetail>> TvCast(string ID);
+        Task<List<SearchItem>> SimilarMovies(string ID);
+        Task<List<SearchItem>> SimilarTV(string ID);
     }
 }

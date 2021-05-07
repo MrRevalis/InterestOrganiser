@@ -12,15 +12,15 @@ namespace InterestOrganiser.ViewModels
     [QueryProperty("ID", "id")]
     public class BookDetailViewModel : BaseViewModel
     {
+        private IBookApi bookApi;
+
+        public ICommand AppearingCommand { get; }
+
         private string id;
         public string ID
         {
             get => id;
-            set
-            {
-                SetProperty(ref id, value);
-                Task.Run(() => ExecuteLoadItem());
-            }
+            set => SetProperty(ref id, value);
         }
 
         private BookDetail book;
@@ -30,22 +30,21 @@ namespace InterestOrganiser.ViewModels
             set => SetProperty(ref book, value);
         }
 
-        public ICommand Refresh { get; }
-
-        private IBookApi bookApi;
-
         public BookDetailViewModel()
         {
             bookApi = DependencyService.Get<IBookApi>();
+
             Book = new BookDetail();
+
+            AppearingCommand = new Command(async () => await OnAppearing());
         }
 
-        private async Task ExecuteLoadItem()
+        private async Task OnAppearing()
         {
             IsBusy = true;
 
             BookDetail response = await bookApi.GetBook(ID);
-            if(response != null)
+            if (response != null)
             {
                 Book = response;
             }

@@ -4,31 +4,45 @@
              xmlns:vm="clr-namespace:InterestOrganiser.ViewModels"
              xmlns:cv="clr-namespace:InterestOrganiser.Converters"
              xmlns:cu="clr-namespace:InterestOrganiser.Custom"
-             x:Class="InterestOrganiser.Views.BookDetailPage">
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             x:Class="InterestOrganiser.Views.BookDetailPage"
+             Title="{Binding Book.Book.Title}">
 
     <ContentPage.BindingContext>
         <vm:BookDetailViewModel/>
     </ContentPage.BindingContext>
+    
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior
+            EventName="Appearing"
+            Command="{Binding AppearingCommand}"/>
+    </ContentPage.Behaviors>
     
     <ContentPage.Resources>
         <ResourceDictionary>
             <cv:ImageSourceConverter x:Key="ImageSourceConverter"/>
         </ResourceDictionary>
     </ContentPage.Resources>
-    
+
     <ContentPage.Content>
-        <RefreshView
-            Margin="5">
-            <ScrollView>
-                <Grid>
+        <ScrollView>
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+               
+                <Grid 
+                    Grid.Row="0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="260"/>
+                        <RowDefinition/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-
                     <Image
                         Grid.Row="0"
                         Grid.Column="0"
@@ -42,6 +56,7 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
@@ -74,21 +89,66 @@
                             ImageWidth="20"
                             ImageHeight="20"
                             StarsAmount="{Binding Book.Book.AverageRating}"/>
-                        <Button
-                            Grid.Row="3"
-                            Grid.Column="0"
-                            VerticalOptions="End"
-                            Text="To read"/>
-                        <Button
-                            Grid.Row="3"
-                            Grid.Column="1"
-                            VerticalOptions="End"
-                            Text="Read"/>
+
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="End" Grid.Row="3" Grid.ColumnSpan="2">
+                            <ImageButton
+                                Source="ic_action_favorite_blank.png"
+                                WidthRequest="30"
+                                HeightRequest="30"
+                                BackgroundColor="Transparent">
+                            </ImageButton>
+
+                            <ImageButton
+                                Source="ic_action_check_box_outline_blank.png"
+                                WidthRequest="30"
+                                HeightRequest="30"
+                                BackgroundColor="Transparent">
+                            </ImageButton>
+                        </StackLayout>
                     </Grid>
+                </Grid>
+
+                <Label Grid.Row="1" Text="{Binding Book.Book.Description}"/>
+
+                <Grid
+                    Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Text="Publisher" FontAttributes="Bold" Grid.Row="0" Grid.Column="0"/>
+                    <Label Text="{Binding Book.Book.Publisher}" Grid.Row="1" Grid.Column="0"/>
+
+                    <Label Text="Release date" FontAttributes="Bold" Grid.Row="0" Grid.Column="1"/>
+                    <Label Text="{Binding Book.Book.PublishedDate}" Grid.Row="1" Grid.Column="1"/>
+
+                    <Label Text="Number of pages" FontAttributes="Bold" Grid.Row="0" Grid.Column="2"/>
+                    <Label Text="{Binding Book.Book.PageCount}" Grid.Row="1" Grid.Column="2"/>
+
+                    <Label Text="Genres" FontAttributes="Bold" Grid.Row="2" Grid.Column="0"/>
+                    <Label Text="{Binding Book.Book.Categories[0]}" Grid.Row="3" Grid.Column="0"/>
+
+                    <Label Text="Average rating" FontAttributes="Bold" Grid.Row="2" Grid.Column="1"/>
+                    <Label Text="{Binding Book.Book.AverageRating}" Grid.Row="3" Grid.Column="1"/>
+
+                    <Label Text="Language" FontAttributes="Bold" Grid.Row="2" Grid.Column="2"/>
+                    <Label Text="{Binding Book.Book.Language}" Grid.Row="3" Grid.Column="2"/>
 
                 </Grid>
-            </ScrollView>
-        </RefreshView>
-        
+                
+                <cu:LoadingScreen
+                    Grid.Row="0"
+                    Grid.RowSpan="3"
+                    ShouldWork="{Binding IsBusy}"/>
+            </Grid>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

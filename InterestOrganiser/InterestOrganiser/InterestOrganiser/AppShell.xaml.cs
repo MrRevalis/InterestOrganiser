@@ -12,6 +12,7 @@ namespace InterestOrganiser
             Routing.RegisterRoute("registration", typeof(RegistrationPage));
             Routing.RegisterRoute("detail", typeof(DetailPage));
             Routing.RegisterRoute("detailbook", typeof(BookDetailPage));
+            Routing.RegisterRoute("search", typeof(SearchPage));
 
         }
 

@@ -68,8 +68,7 @@ namespace InterestOrganiser.Services
                         Background = imageSource + movieResponse.backdrop_path,
                         Genres = genres,
                         Overview = movieResponse.overview,
-                        Cast = await MovieCast(ID),
-                        VoteStars = Math.Round((double)movieResponse.vote_average * 2, MidpointRounding.AwayFromZero) / 4
+                        Cast = await MovieCast(ID)
                     };
                 }
             }
@@ -162,6 +161,52 @@ namespace InterestOrganiser.Services
             return new List<SearchItem>();
         }
 
+        public async Task<List<SearchItem>> SimilarMovies(string ID)
+        {
+            HttpResponseMessage response = await client.GetAsync($"movie/{ID}/similar?api_key={api}");
+            if (response.IsSuccessStatusCode)
+            {
+                string content = await response.Content.ReadAsStringAsync();
+                Movie movieResponse = JsonConvert.DeserializeObject<Movie>(content);
+                if (movieResponse.results.Any())
+                {
+                    List<SearchItem> movies = movieResponse.results.Select(x => new SearchItem
+                    {
+                        ID = x.id.ToString(),
+                        Type = "movies",
+                        Title = x.title,
+                        Background = imageSource + x.poster_path,
+                    }).ToList();
+
+                    return movies;
+                }
+            }
+            return new List<SearchItem>();
+        }
+
+        public async Task<List<SearchItem>> SimilarTV(string ID)
+        {
+            HttpResponseMessage response = await client.GetAsync($"tv/{ID}/similar?api_key={api}");
+            if (response.IsSuccessStatusCode)
+            {
+                string content = await response.Content.ReadAsStringAsync();
+                Movie movieResponse = JsonConvert.DeserializeObject<Movie>(content);
+                if (movieResponse.results.Any())
+                {
+                    List<SearchItem> movies = movieResponse.results.Select(x => new SearchItem
+                    {
+                        ID = x.id.ToString(),
+                        Type = "tv series",
+                        Title = x.name,
+                        Background = imageSource + x.poster_path,
+                    }).ToList();
+
+                    return movies;
+                }
+            }
+            return new List<SearchItem>();
+        }
+
         public async Task<List<SearchItem>> TrendingList(string mediaType, string time)
         {
             HttpResponseMessage response = await client.GetAsync($"trending/{mediaType}/{time}?api_key={api}");
@@ -228,8 +273,7 @@ namespace InterestOrganiser.Services
                         Background = imageSource + movieResponse.backdrop_path,
                         Genres = genres,
                         Overview = movieResponse.overview,
-                        Cast = await TvCast(ID),
-                        VoteStars = Math.Round((double)movieResponse.vote_average * 2, MidpointRounding.AwayFromZero) / 4
+                        Cast = await TvCast(ID)
                     };
                 }
             }

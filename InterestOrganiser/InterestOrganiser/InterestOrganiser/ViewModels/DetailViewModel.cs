@@ -20,20 +20,14 @@ namespace InterestOrganiser.ViewModels
         public string Type
         {
             get => type;
-            set
-            {
-                SetProperty(ref type, value);
-            }
+            set => SetProperty(ref type, value);
         }
 
         private string id;
         public string ID
         {
             get => id;
-            set {
-                SetProperty(ref id, value);
-                Task.Run(() => ExecuteLoadItem());
-            }
+            set => SetProperty(ref id, value);
         }
 
         private bool itemRealised;

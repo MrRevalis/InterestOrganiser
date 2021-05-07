@@ -4,6 +4,7 @@
              xmlns:vm="clr-namespace:InterestOrganiser.ViewModels"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:cv="clr-namespace:InterestOrganiser.Converters"
+             xmlns:cu="clr-namespace:InterestOrganiser.Custom"
              x:Class="InterestOrganiser.Views.MainPage"
              x:Name="mainPage">
 
@@ -31,9 +32,9 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <ImageButton Grid.Column="0" Source="ic_action_search.png" HorizontalOptions="Start" BackgroundColor="Transparent" Command="{Binding SearchPageCommand}"/>
-            <Label Grid.Column="1" Text="Discover" HorizontalOptions="Center" VerticalOptions="Center" FontSize="Large"/>
-            <ImageButton Grid.Column="2" Source="ic_action_logout.png" HorizontalOptions="End" BackgroundColor="Transparent" Command="{Binding SignOutCommand}"/>
+            <ImageButton Grid.Column="0" Source="ic_action_search.png" Scale="0.8" HorizontalOptions="Start" BackgroundColor="Transparent" Command="{Binding SearchPageCommand}"/>
+            <Label Grid.Column="1" Text="Discover" HorizontalOptions="Center" VerticalOptions="Center" FontSize="Medium" FontAttributes="Bold"/>
+            <ImageButton Grid.Column="2" Source="ic_action_logout.png" Scale="0.8" HorizontalOptions="End" BackgroundColor="Transparent" Command="{Binding SignOutCommand}"/>
         </Grid>
     </Shell.TitleView>
     
@@ -143,13 +144,10 @@
                 </CollectionView>
             </SwipeView>
 
-
-            <ActivityIndicator
-                IsRunning="{Binding IsBusy}"
-                Grid.Row="2"
-                HorizontalOptions="Center"
-                VerticalOptions="Center"
-                InputTransparent="True"/>
+            <cu:LoadingScreen
+                ShouldWork="{Binding IsBusy}"
+                Grid.Row="2"/>
+            
         </Grid>
     </ContentPage.Content>
 </ContentPage>

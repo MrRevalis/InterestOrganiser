@@ -24,7 +24,14 @@ namespace InterestOrganiser.Droid
                 .SetApiKey("AIzaSyAAz_2uNo58Qzq8T7J1t6_-3dNMXfBOFrI")
                 .SetStorageBucket("fir-database-aff8d.appspot.com")
                 .Build();
-            FirebaseApp.InitializeApp(Application.Context, options);
+
+            if(FirebaseApp.GetApps(Application.Context).Count == 0)
+            {
+                FirebaseApp.InitializeApp(Application.Context, options);
+            }
+
+
+            //FirebaseApp.InitializeApp(Application.Context, options);
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);

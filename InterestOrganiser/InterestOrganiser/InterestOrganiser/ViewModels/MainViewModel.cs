@@ -17,6 +17,8 @@ namespace InterestOrganiser.ViewModels
     public class MainViewModel : BaseViewModel
     {
         private IMovieDB movieDB;
+        private string lastItemID;
+        private string typeItem;
         #region Command
         public ICommand AppearingCommand { get; private set; }
         public ICommand SearchPageCommand { get; private set; }
@@ -109,9 +111,9 @@ namespace InterestOrganiser.ViewModels
 
         }
 
-        private void GoToSearchPage()
+        private async void GoToSearchPage()
         {
-
+            await Shell.Current.GoToAsync($"//main/search?type={typeItem}&id={lastItemID}");
         }
         private async Task ChangePage(SearchItem item)
         {
@@ -121,7 +123,12 @@ namespace InterestOrganiser.ViewModels
             if (item.Type.Equals("books"))
                 await Shell.Current.GoToAsync($"detailbook?id={item.ID}");
             else
+            {
+                lastItemID = item.ID;
+                typeItem = item.Type;
                 await Shell.Current.GoToAsync($"detail?type={item.Type}&id={item.ID}");
+            }
+
         }
 
         private async Task OnAppearing()

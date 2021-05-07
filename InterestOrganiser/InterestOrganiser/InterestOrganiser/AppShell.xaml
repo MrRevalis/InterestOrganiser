@@ -19,6 +19,12 @@
                 ContentTemplate="{DataTemplate local:MainPage}" />
         </Tab>
         <Tab
+            Title="Search"
+            Icon="ic_action_search.png">
+            <ShellContent 
+                ContentTemplate="{DataTemplate local:SearchPage}" />
+        </Tab>
+        <Tab
             Title="Browse"
             Icon="icon_feed.png">
             <ShellContent 

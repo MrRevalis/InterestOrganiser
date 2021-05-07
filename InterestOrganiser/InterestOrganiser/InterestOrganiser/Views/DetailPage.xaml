@@ -6,6 +6,7 @@
              xmlns:cm="http://xamarin.com/schemas/2020/toolkit"
              xmlns:cu="clr-namespace:InterestOrganiser.Custom"
              xmlns:cv="clr-namespace:InterestOrganiser.Converters"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              x:Class="InterestOrganiser.Views.DetailPage"
              x:Name="mainPage"
              Title="{Binding Item.Title}">
@@ -13,7 +14,13 @@
     <ContentPage.BindingContext>
         <vm:DetailViewModel/>
     </ContentPage.BindingContext>
-
+    
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior
+            EventName="Appearing"
+            Command="{Binding Refresh}"/>
+    </ContentPage.Behaviors>
+    
     <ContentPage.Resources>
         <ResourceDictionary>
             <cv:ImageSourceConverter x:Key="ImageSourceConverter"/>
@@ -22,156 +29,149 @@
     
     <ContentPage.Content>
         <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <RefreshView
-                Grid.Row="0"
-                Command="{Binding Refresh}"
-                IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
-                <ScrollView>
-                    <StackLayout>
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition
-                                    Height="230"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition
-                                    Width="120"/>
-                                <ColumnDefinition
-                                    Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <Image
-                                Grid.Row="0"
-                                Grid.ColumnSpan="2"
-                                Aspect="Fill"
-                                Source="{Binding Item.Background}"/>
-                            <Image
-                                Grid.Row="0"
-                                Margin="5"
-                                Source="{Binding Item.Poster, Converter={StaticResource ImageSourceConverter}}"/>
-                        </Grid>
-                        <StackLayout Margin="10">
-                            <StackLayout Orientation="Horizontal" HorizontalOptions="Start">
-                                <StackLayout>
-                                    <ImageButton
-                                        Source="ic_action_check_box_outline_blank.png"
-                                        WidthRequest="30"
-                                        HeightRequest="30"
-                                        BackgroundColor="Transparent"
-                                        Command="{Binding AddToRealise}">
-                                        <ImageButton.Triggers>
-                                            <DataTrigger
-                                                TargetType="ImageButton"
-                                                Binding="{Binding ItemToRealise}"
-                                                Value="True">
-                                                <Setter Property="Source" Value="ic_action_check_box_todo.png"/>
-                                            </DataTrigger>
-                                        </ImageButton.Triggers>
-                                        <ImageButton.GestureRecognizers>
-                                            <TapGestureRecognizer
-                                                Command="{Binding Source={x:Reference mainPage}, Path=BindingContext.AddToRealise}"/>
-                                        </ImageButton.GestureRecognizers>
-                                    </ImageButton>
-                                </StackLayout>
+            <ScrollView>
+                <StackLayout>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition
+                                Height="230"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition
+                                Width="120"/>
+                            <ColumnDefinition
+                                Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Image
+                            Grid.Row="0"
+                            Grid.ColumnSpan="2"
+                            Aspect="Fill"
+                            Source="{Binding Item.Background}"/>
+                        <Image
+                            Grid.Row="0"
+                            Margin="5"
+                            Source="{Binding Item.Poster}"/>
+                    </Grid>
+                    <StackLayout Margin="10">
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="Start">
+                            <StackLayout>
+                                <ImageButton
+                                    Source="ic_action_favorite_blank.png"
+                                    WidthRequest="30"
+                                    HeightRequest="30"
+                                    BackgroundColor="Transparent"
+                                    Command="{Binding AddToRealise}">
+                                    <ImageButton.Triggers>
+                                        <DataTrigger
+                                            TargetType="ImageButton"
+                                            Binding="{Binding ItemToRealise}"
+                                            Value="True">
+                                            <Setter Property="Source" Value="ic_action_favorite.png"/>
+                                        </DataTrigger>
+                                    </ImageButton.Triggers>
+                                    <ImageButton.GestureRecognizers>
+                                        <TapGestureRecognizer
+                                            Command="{Binding Source={x:Reference mainPage}, Path=BindingContext.AddToRealise}"/>
+                                    </ImageButton.GestureRecognizers>
+                                </ImageButton>
+                            </StackLayout>
 
-                                <StackLayout>
-                                    <ImageButton
-                                        Source="ic_action_check_box.png"
-                                        WidthRequest="30"
-                                        HeightRequest="30"
-                                        BackgroundColor="Transparent"
-                                        Command="{Binding AddRealised}">
-                                        <ImageButton.Triggers>
-                                            <DataTrigger
-                                                TargetType="ImageButton"
-                                                Binding="{Binding ItemRealised}"
-                                                Value="True">
-                                                <Setter Property="Source" Value="ic_action_check_box_red.png"/>
-                                            </DataTrigger>
-                                        </ImageButton.Triggers>
-                                    </ImageButton>
-                                </StackLayout>
+                            <StackLayout>
+                                <ImageButton
+                                    Source="ic_action_check_box_outline_blank.png"
+                                    WidthRequest="30"
+                                    HeightRequest="30"
+                                    BackgroundColor="Transparent"
+                                    Command="{Binding AddRealised}">
+                                    <ImageButton.Triggers>
+                                        <DataTrigger
+                                            TargetType="ImageButton"
+                                            Binding="{Binding ItemRealised}"
+                                            Value="True">
+                                            <Setter Property="Source" Value="ic_action_check_box.png"/>
+                                        </DataTrigger>
+                                    </ImageButton.Triggers>
+                                </ImageButton>
                             </StackLayout>
-                            <Label
-                                Text="{Binding Item.Title}" FontAttributes="Bold" FontSize="Large" HorizontalOptions="Center"/>
-                            <StackLayout Orientation="Horizontal">
-                                <Label
-                                    Text="{Binding Item.VoteAverage}"
-                                    FontSize="Medium"/>
-                                <cu:RatingBar
-                                    Margin="10, 0, 0, 0"
-                                    ImageWidth="35"
-                                    ImageHeight="35"
-                                    StarsAmount="{Binding Item.VoteStars}"/>
-                            </StackLayout>
-                            <StackLayout Orientation="Horizontal">
-                                <Label
-                                    Text="{Binding Item.Release}"
-                                    FontSize="Medium"/>
-                                <Label
-                                    Text="{Binding Item.Runtime}"
-                                    FontSize="Medium"/>
-                            </StackLayout>
-                            <Label 
-                                Text="{Binding Item.Genres}"
-                                FontSize="Caption"/>
-                            <Label 
-                                Text="{Binding Item.Overview}"
-                                FontSize="Body"/>
-                            <Label
-                                Text="Cast"
-                                FontSize="Large"/>
-                            <CollectionView
-                                HeightRequest="150"
-                                ItemsSource="{Binding Item.Cast}"
-                                ItemsLayout="HorizontalList">
-
-                                <CollectionView.EmptyView>
-                                    <Label
-                                        HorizontalTextAlignment="Center"
-                                        VerticalTextAlignment="Center"
-                                        Text="Empty list"
-                                        FontSize="Large"/>
-                                </CollectionView.EmptyView>
-                                
-                                <CollectionView.ItemTemplate>
-                                    <DataTemplate>
-                                        <Grid WidthRequest="85" Margin="10">
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="130"/>
-                                                <RowDefinition Height="Auto"/>
-                                            </Grid.RowDefinitions>
-                                            <Image
-                                                BackgroundColor="Red"
-                                                Grid.Row="0"
-                                                HorizontalOptions="Center"
-                                                VerticalOptions="Center"
-                                                Source="{Binding Image}">
-                                                <Image.Clip>
-                                                    <EllipseGeometry
-                                                        RadiusX="40"
-                                                        RadiusY="40"
-                                                        Center="45,60"/>
-                                                </Image.Clip>
-                                            </Image>
-                                            <Label
-                                                Margin="10, -30"
-                                                HorizontalTextAlignment="Center"
-                                                Grid.Row="1"
-                                                Text="{Binding Name}"/>
-                                        </Grid>
-                                    </DataTemplate>
-                                </CollectionView.ItemTemplate>
-                            </CollectionView>
                         </StackLayout>
-                    </StackLayout>
-                </ScrollView>
-            </RefreshView>
+                        <Label
+                            Text="{Binding Item.Title}" FontAttributes="Bold" FontSize="Large" HorizontalOptions="Center"/>
+                        <StackLayout Orientation="Horizontal">
+                            <Label
+                                Text="{Binding Item.VoteAverage}"
+                                FontSize="Medium"/>
+                            <cu:RatingBar
+                                Margin="10, 0, 0, 0"
+                                ImageWidth="20"
+                                ImageHeight="20"
+                                StarsAmount="{Binding Item.VoteAverage}"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <Label
+                                Text="{Binding Item.Release}"
+                                FontSize="Medium"/>
+                            <Label
+                                Text="{Binding Item.Runtime}"
+                                FontSize="Medium"/>
+                        </StackLayout>
+                        <Label 
+                            Text="{Binding Item.Genres}"
+                            FontSize="Caption"/>
+                        <Label 
+                            Text="{Binding Item.Overview}"
+                            FontSize="Body"/>
+                        <Label
+                            Text="Cast"
+                            FontSize="Large"/>
+                        <CollectionView
+                            HeightRequest="150"
+                            ItemsSource="{Binding Item.Cast}"
+                            ItemsLayout="HorizontalList">
 
-            
-            
+                            <CollectionView.EmptyView>
+                                <Label
+                                    HorizontalTextAlignment="Center"
+                                    VerticalTextAlignment="Center"
+                                    Text="Empty list"
+                                    FontSize="Large"/>
+                            </CollectionView.EmptyView>
+
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid WidthRequest="85" Margin="10">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="130"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Image
+                                            BackgroundColor="Red"
+                                            Grid.Row="0"
+                                            HorizontalOptions="Center"
+                                            VerticalOptions="Center"
+                                            Source="{Binding Image}">
+                                            <Image.Clip>
+                                                <EllipseGeometry
+                                                    RadiusX="40"
+                                                    RadiusY="40"
+                                                    Center="45,60"/>
+                                            </Image.Clip>
+                                        </Image>
+                                        <Label
+                                            Margin="10, -30"
+                                            HorizontalTextAlignment="Center"
+                                            Grid.Row="1"
+                                            Text="{Binding Name}"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </StackLayout>
+                </StackLayout>
+            </ScrollView>
+
+            <cu:LoadingScreen
+                ShouldWork="{Binding IsBusy}"/>
+
         </Grid>
     </ContentPage.Content>
 </ContentPage>

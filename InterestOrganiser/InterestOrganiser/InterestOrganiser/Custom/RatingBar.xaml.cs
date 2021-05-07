@@ -166,7 +166,10 @@ namespace InterestOrganiser.Custom
 
         private static void FillStars(double newValue, RatingBar control)
         {
-            switch (newValue)
+            var value = newValue > 5 ? newValue / 2 : newValue;
+            value = Math.Round(value * 2, MidpointRounding.AwayFromZero) / 2;
+
+            switch (value)
             {
                 case 0:
                     control.Star1.Source = "emptyStar.png";

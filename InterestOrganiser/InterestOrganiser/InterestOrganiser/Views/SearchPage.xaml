@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:InterestOrganiser.ViewModels"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:cu="clr-namespace:InterestOrganiser.Custom"
+             xmlns:cv="clr-namespace:InterestOrganiser.Converters"
+             x:Class="InterestOrganiser.Views.SearchPage"
+             Title="Search">
+
+    <ContentPage.BindingContext>
+        <vm:SearchViewModel/>
+    </ContentPage.BindingContext>
+    
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior
+            EventName="Appearing"
+            Command="{Binding AppearingCommand}"/>
+    </ContentPage.Behaviors>
+    
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <cv:ImageSourceConverter x:Key="ImageSourceConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            
+            <SearchBar
+                Grid.Row="0"
+                x:Name="searchBar"
+                SearchCommand="{Binding SearchCommand}"
+                SearchCommandParameter="{Binding Text, Source={x:Reference searchBar}}">
+                <SearchBar.Behaviors>
+                    <xct:UserStoppedTypingBehavior
+                        Command="{Binding SearchCommand}"
+                        StoppedTypingTimeThreshold="1000"
+                        MinimumLengthThreshold="2"
+                        ShouldDismissKeyboardAutomatically="True"/>
+                </SearchBar.Behaviors>
+            </SearchBar>
+            <BoxView
+                VerticalOptions="End"
+                Grid.Row="0"
+                HeightRequest="1"
+                BackgroundColor="{StaticResource greenDark}"/>
+            <Label
+                Padding="10"
+                Grid.Row="1">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="Search results for "></Span>
+                        <Span Text="{Binding Source={RelativeSource AncestorType={x:Type vm:SearchViewModel}}, Path=SearchedItem, StringFormat='{}&quot;{0}&quot;'}"/>
+                    </FormattedString>
+                </Label.FormattedText>
+                <Label.Triggers>
+                    <DataTrigger
+                        TargetType="Label"
+                        Binding="{Binding SearchedItem, TargetNullValue=''}"
+                        Value="">
+                        <Setter Property="IsVisible" Value="False"/>
+                    </DataTrigger>
+                </Label.Triggers>
+            </Label>
+            <CollectionView
+                Grid.Row="2"
+                ItemsSource="{Binding SearchList}"
+                RemainingItemsThreshold="20"
+                RemainingItemsThresholdReachedCommand="{Binding LoadMoreItems}">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical" Span="3"/>
+                </CollectionView.ItemsLayout>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="150"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Image Source="{Binding Background, Converter={StaticResource ImageSourceConverter}}" Grid.Row="0" Aspect="Fill"/>
+                            <Label Text="{Binding Title}" FontSize="Body" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Row="1"/>
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer 
+                                        Command="{Binding ChangePageCommand, Source={RelativeSource AncestorType={x:Type vm:SearchViewModel}}}"
+                                        CommandParameter="{Binding .}"/>
+                            </Grid.GestureRecognizers>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <cu:LoadingScreen
+                Grid.Row="2"
+                ShouldWork="{Binding IsBusy}"/>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>
