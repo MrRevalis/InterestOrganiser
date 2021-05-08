@@ -14,19 +14,13 @@
     <TabBar Route="main">
         <Tab
             Title="Discover"
-            Icon="icon_about.png">
+            Icon="ic_action_home.png">
             <ShellContent 
                 ContentTemplate="{DataTemplate local:MainPage}" />
         </Tab>
         <Tab
-            Title="Search"
-            Icon="ic_action_search.png">
-            <ShellContent 
-                ContentTemplate="{DataTemplate local:SearchPage}" />
-        </Tab>
-        <Tab
             Title="Browse"
-            Icon="icon_feed.png">
+            Icon="ic_action_featured_play_list.png">
             <ShellContent 
                 ContentTemplate="{DataTemplate local:BrowsePage}" />
         </Tab>

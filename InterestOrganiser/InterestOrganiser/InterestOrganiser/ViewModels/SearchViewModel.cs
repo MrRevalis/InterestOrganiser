@@ -83,10 +83,15 @@ namespace InterestOrganiser.ViewModels
             if (item == null)
                 return;
 
-            if (item.Type.Equals("books"))
-                await Shell.Current.GoToAsync($"detailbook?id={item.ID}");
-            else
-                await Shell.Current.GoToAsync($"detail?type={item.Type}&id={item.ID}");
+            switch (item.Type)
+            {
+                case "books": await Shell.Current.GoToAsync($"detailbook?id={item.ID}"); break;
+                case "games": await Shell.Current.GoToAsync($"detailgame?id={item.ID}"); break;
+                case "movies": await Shell.Current.GoToAsync($"detail?type={item.Type}&id={item.ID}"); break;
+                case "tv series": await Shell.Current.GoToAsync($"detail?type={item.Type}&id={item.ID}"); break;
+                default:
+                    await Shell.Current.GoToAsync("//main"); break;
+            }
         }
 
         private async Task Search(string title)

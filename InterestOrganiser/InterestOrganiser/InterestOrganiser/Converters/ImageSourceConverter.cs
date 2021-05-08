@@ -13,8 +13,10 @@ namespace InterestOrganiser.Converters
         static WebClient Client = new WebClient();
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            string fileName = parameter as string == null ? "defaultCover.jpg" : parameter as string;
+
             if (value == null)
-                return ImageSource.FromResource("InterestOrganiser.Resources.Images.defaultCover.jpg");
+                return ImageSource.FromResource($"InterestOrganiser.Resources.Images.{fileName}");
             try
             {
                 var byteArray = Client.DownloadData(value.ToString());
@@ -22,7 +24,7 @@ namespace InterestOrganiser.Converters
             }
             catch
             {
-                return ImageSource.FromResource("InterestOrganiser.Resources.Images.defaultCover.jpg");
+                return ImageSource.FromResource($"InterestOrganiser.Resources.Images.{fileName}");
             }
         }
 

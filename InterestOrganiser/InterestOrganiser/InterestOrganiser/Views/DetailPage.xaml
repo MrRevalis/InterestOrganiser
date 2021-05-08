@@ -18,7 +18,7 @@
     <ContentPage.Behaviors>
         <xct:EventToCommandBehavior
             EventName="Appearing"
-            Command="{Binding Refresh}"/>
+            Command="{Binding AppearingCommand}"/>
     </ContentPage.Behaviors>
     
     <ContentPage.Resources>
@@ -124,9 +124,10 @@
                             Text="Cast"
                             FontSize="Large"/>
                         <CollectionView
-                            HeightRequest="150"
+                            ItemSizingStrategy="MeasureAllItems"
                             ItemsSource="{Binding Item.Cast}"
-                            ItemsLayout="HorizontalList">
+                            ItemsLayout="HorizontalList"
+                            HeightRequest="170">
 
                             <CollectionView.EmptyView>
                                 <Label
@@ -144,21 +145,23 @@
                                             <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
                                         <Image
-                                            BackgroundColor="Red"
+                                            HeightRequest="130"
+                                            WidthRequest="85"
                                             Grid.Row="0"
                                             HorizontalOptions="Center"
                                             VerticalOptions="Center"
-                                            Source="{Binding Image}">
+                                            Source="{Binding Image, Converter={StaticResource ImageSourceConverter}}">
                                             <Image.Clip>
                                                 <EllipseGeometry
-                                                    RadiusX="40"
-                                                    RadiusY="40"
+                                                    RadiusX="50"
+                                                    RadiusY="50"
                                                     Center="45,60"/>
                                             </Image.Clip>
                                         </Image>
                                         <Label
-                                            Margin="10, -30"
+                                            Margin="10, -20"
                                             HorizontalTextAlignment="Center"
+                                            VerticalOptions="Fill"
                                             Grid.Row="1"
                                             Text="{Binding Name}"/>
                                     </Grid>
@@ -166,6 +169,40 @@
                             </CollectionView.ItemTemplate>
                         </CollectionView>
                     </StackLayout>
+                    <Label
+                        Margin="10, -30, 0, 0"
+                        Text="Trailers"
+                        FontSize="Large"/>
+                    <CollectionView
+                        ItemSizingStrategy="MeasureAllItems"
+                        ItemsLayout="HorizontalList"
+                        ItemsSource="{Binding VideoList}"
+                        HeightRequest="220">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="5">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Image
+                                        Grid.Row="0"
+                                        Source="{Binding Thumbail, Converter={StaticResource ImageSourceConverter}, ConverterParameter='backgroundEmpty.jpg'}"/>
+                                    <Button
+                                        Grid.Row="0"
+                                        HorizontalOptions="Center"
+                                        VerticalOptions="Center"
+                                        HeightRequest="60"
+                                        WidthRequest="60"
+                                        BorderRadius="30"
+                                        BackgroundColor="#66000000"
+                                        ImageSource="ic_action_play_arrow.png"
+                                        Command="{Binding PlayVideoCommand, Source={RelativeSource AncestorType={x:Type vm:DetailViewModel}}}"
+                                        CommandParameter="{Binding YouTube}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
                 </StackLayout>
             </ScrollView>
 

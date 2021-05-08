@@ -15,7 +15,7 @@
                 <Setter Property="Shell.TabBarBackgroundColor" Value="{StaticResource charcoalDarkColor}" />
                 <Setter Property="Shell.TabBarForegroundColor" Value="{StaticResource PrimaryTextColor}" />
                 <Setter Property="Shell.TabBarUnselectedColor" Value="{StaticResource PrimaryTextColor}" />
-                <Setter Property="Shell.TabBarTitleColor" Value="{StaticResource fuzzyDarkColor}" />
+                <Setter Property="Shell.TabBarTitleColor" Value="{StaticResource greenDark}" />
                 <Setter Property="Shell.BackgroundColor" Value="{StaticResource charcoalDarkColor}"/>
             </Style>
             
@@ -39,14 +39,14 @@
             </Style>
 
             <Style TargetType="Button">
-                <Setter Property="BackgroundColor" Value="{StaticResource burlywoodDarkColor}"/>
+                <Setter Property="BackgroundColor" Value="{StaticResource fuzzyDarkColor}"/>
                 <Setter Property="TextColor" Value="White"/>
                 <Setter Property="WidthRequest" Value="180"/>
                 <Setter Property="HeightRequest" Value="40"/>
             </Style>
             
             <Style TargetType="Label" x:Key="ErrorTextStyle">
-                <Setter Property="TextColor" Value="Red"/>
+                <Setter Property="TextColor" Value="{StaticResource fuzzyDarkColor}"/>
                 <Setter Property="FontSize" Value="12"/>
             </Style>
         </ResourceDictionary>

@@ -1,4 +1,5 @@
 ﻿using InterestOrganiser.Models;
+using InterestOrganiser.Models.GameDetail;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,6 +10,6 @@ namespace InterestOrganiser.Services
     public interface IGameApi
     {
         Task<List<SearchItem>> SearchGames(string title);
-        Task GetGameDetails(string ID);
+        Task<GameDetail> GetGameDetails(string ID);
     }
 }

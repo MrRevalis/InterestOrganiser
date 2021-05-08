@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:vm="clr-namespace:InterestOrganiser.ViewModels"
+             x:Class="InterestOrganiser.Views.PlayerPage"
+             Shell.NavBarIsVisible="False"
+             Shell.TabBarIsVisible="False">
+
+    <ContentPage.BindingContext>
+        <vm:PlayerViewModel/>
+    </ContentPage.BindingContext>
+    
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior
+            EventName="Appearing"
+            Command="{Binding AppearingCommand}"/>
+    </ContentPage.Behaviors>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <xct:MediaElement 
+            x:Name="videoPlayer"
+            Grid.Row="0" 
+            ShowsPlaybackControls="True"
+            AutoPlay="True"
+            Source="{Binding StreamVideo}">
+        </xct:MediaElement>
+        <ActivityIndicator
+            Grid.Row="0"
+            HorizontalOptions="Center"
+            VerticalOptions="Center"
+            Color="White"
+            BackgroundColor="Transparent"
+            IsRunning="{Binding IsBusy}"/>
+    </Grid>
+</ContentPage>

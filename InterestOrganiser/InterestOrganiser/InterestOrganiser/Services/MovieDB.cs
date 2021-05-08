@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using MovieBase.Models.MovieDetail;
 using InterestOrganiser.Models.Cast;
+using InterestOrganiser.Models.MovieTrailers;
 
 namespace InterestOrganiser.Services
 {
@@ -115,6 +116,26 @@ namespace InterestOrganiser.Services
             return new List<SearchItem>();
         }
 
+        public async Task<List<Video>> MoviesTrailers(string ID, string type)
+        {
+            string link = type == "movies" ? $"movie/{ID}/videos" : $"tv/{ID}/videos";
+            HttpResponseMessage response = await client.GetAsync($"{link}?api_key={api}");
+            if (response.IsSuccessStatusCode)
+            {
+                string content = await response.Content.ReadAsStringAsync();
+                MoviesVideo moviesVideo = JsonConvert.DeserializeObject<MoviesVideo>(content);
+                if(moviesVideo != null)
+                {
+                    return moviesVideo.results.Where(x => x.site == "YouTube").Select(y => new Video
+                    {
+                        YouTube = y.key,
+                        Thumbail = $"https://i1.ytimg.com/vi/{y.key}/maxresdefault.jpg"
+                    }).ToList();
+                }
+            }
+            return null;
+        }
+
         public async Task<List<SearchItem>> SearchMovie(string title)
         {
             HttpResponseMessage response = await client.GetAsync($"search/movie?api_key={api}&query={title}");
@@ -129,7 +150,7 @@ namespace InterestOrganiser.Services
                         ID = x.id.ToString(),
                         Type = "movies",
                         Title = x.title,
-                        Background = imageSource + x.backdrop_path,
+                        Background = imageSource + x.poster_path,
                     }).ToList();
 
                     return movies;
@@ -152,7 +173,7 @@ namespace InterestOrganiser.Services
                         ID = x.id.ToString(),
                         Type = "tv series",
                         Title = x.name,
-                        Background = imageSource + x.backdrop_path,
+                        Background = imageSource + x.poster_path,
                     }).ToList();
 
                     return movies;

@@ -12,7 +12,9 @@ namespace InterestOrganiser
             Routing.RegisterRoute("registration", typeof(RegistrationPage));
             Routing.RegisterRoute("detail", typeof(DetailPage));
             Routing.RegisterRoute("detailbook", typeof(BookDetailPage));
+            Routing.RegisterRoute("detailgame", typeof(GameDetailPage));
             Routing.RegisterRoute("search", typeof(SearchPage));
+            Routing.RegisterRoute("video", typeof(PlayerPage));
 
         }
 

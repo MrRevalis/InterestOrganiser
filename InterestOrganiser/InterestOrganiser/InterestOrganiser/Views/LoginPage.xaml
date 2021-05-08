@@ -23,22 +23,36 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition
-                    Height="160"/>
+                    Height="Auto"/>
                 <RowDefinition
                     Height="*"/>
                 <RowDefinition
                     Height="60"/>
             </Grid.RowDefinitions>
             <Frame
-                BackgroundColor="{StaticResource charcoalDarkColor}"
                 Grid.Row="0">
-                <Label
-                    Text="Organiser"
-                    TextColor="White"
-                    FontSize="Large"
-                    VerticalOptions="FillAndExpand"
-                    VerticalTextAlignment="Center"
-                    HorizontalTextAlignment="Center"/>
+                <Frame.Background>
+                    <LinearGradientBrush
+                        EndPoint="0,1">
+                        <GradientStop 
+                            Color="{StaticResource charcoalDarkColor}"
+                            Offset="0.1"/>
+                        <GradientStop 
+                            Color="{StaticResource fuzzyDarkColor}"
+                            Offset="1.0"/>
+                    </LinearGradientBrush>
+                </Frame.Background>
+                <StackLayout>
+                    <Image
+                        Source="smallIcon.png"
+                        HorizontalOptions="Center"/>
+                    <Label
+                        Text="Organiser"
+                        TextColor="White"
+                        FontSize="Large"
+                        FontAttributes="Bold"
+                        HorizontalOptions="Center"/>
+                </StackLayout>
             </Frame>
 
             <Grid
@@ -81,7 +95,6 @@
                 </Button>
             </Grid>
             <StackLayout
-                BackgroundColor="{StaticResource charcoalDarkColor}"
                 Grid.Row="2">
                 <Label
                     Text="Create new account"

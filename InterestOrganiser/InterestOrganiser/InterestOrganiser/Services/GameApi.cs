@@ -1,5 +1,6 @@
 ﻿using InterestOrganiser.Models;
 using InterestOrganiser.Models.Game;
+using InterestOrganiser.Models.GameDetail;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -12,24 +13,34 @@ namespace InterestOrganiser.Services
 {
     public class GameApi : IGameApi
     {
-        private const string ApiKey = "96293706af514b2c80049493ba45f55b";
-        private HttpClient Client;
+        private const string api = "96293706af514b2c80049493ba45f55b";
+        private HttpClient client;
 
         public GameApi()
         {
-            Client = new HttpClient();
-            Client.BaseAddress = new Uri("https://rawg.io/api/");
-            Client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            client = new HttpClient();
+            client.BaseAddress = new Uri("https://rawg.io/api/");
+            client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public async Task GetGameDetails(string ID)
+        public async Task<GameDetail> GetGameDetails(string ID)
         {
-            throw new NotImplementedException();
+            HttpResponseMessage response = await client.GetAsync($"games/{ID}?key={api}");
+            if (response.IsSuccessStatusCode)
+            {
+                string content = await response.Content.ReadAsStringAsync();
+                GameDetail game = JsonConvert.DeserializeObject<GameDetail>(content);
+                if(game != null)
+                {
+                    return game;
+                }
+            }
+            return null;
         }
 
         public async Task<List<SearchItem>> SearchGames(string title)
         {
-            HttpResponseMessage response = await Client.GetAsync($"games?key={ApiKey}&search={title}");
+            HttpResponseMessage response = await client.GetAsync($"games?key={api}&search={title}");
             if (response.IsSuccessStatusCode)
             {
                 string content = await response.Content.ReadAsStringAsync();

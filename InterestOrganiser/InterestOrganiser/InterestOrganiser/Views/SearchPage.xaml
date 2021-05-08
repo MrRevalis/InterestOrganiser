@@ -81,7 +81,7 @@
                     <DataTemplate>
                         <Grid Padding="10">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="150"/>
+                                <RowDefinition Height="180"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             <Image Source="{Binding Background, Converter={StaticResource ImageSourceConverter}}" Grid.Row="0" Aspect="Fill"/>

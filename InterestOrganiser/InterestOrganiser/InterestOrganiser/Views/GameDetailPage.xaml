@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:InterestOrganiser.ViewModels"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:cu="clr-namespace:InterestOrganiser.Custom"
+             x:Class="InterestOrganiser.Views.GameDetailPage"
+             Title="{Binding Game.name}">
+
+    <ContentPage.BindingContext>
+        <vm:GameDetailViewModel/>
+    </ContentPage.BindingContext>
+    
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior
+            EventName="Appearing"
+            Command="{Binding AppearingCommand}"/>
+    </ContentPage.Behaviors>
+    
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout>
+                <cu:LoadingScreen ShouldWork="{Binding IsBusy}"/>
+                <Image
+                    Source="{Binding Game.background_image}"/>
+                <Label
+                    Text="{Binding Game.name}"
+                    HorizontalOptions="Center"
+                    Padding="5"
+                    FontSize="Large"/>
+                <StackLayout Orientation="Horizontal" Margin="10, 0">
+                    <Label HorizontalOptions="StartAndExpand">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Released date: "/>
+                                <Span Text="{Binding Game.released}" FontAttributes="Bold"/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                    <cu:RatingBar StarsAmount="{Binding Game.rating}" HorizontalOptions="End"/>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="End" Grid.Row="3" Grid.ColumnSpan="2">
+                    <ImageButton
+                        Source="ic_action_favorite_blank.png"
+                        WidthRequest="30"
+                        HeightRequest="30"
+                        BackgroundColor="Transparent">
+                    </ImageButton>
+                    <ImageButton
+                        Source="ic_action_check_box_outline_blank.png"
+                        WidthRequest="30"
+                        HeightRequest="30"
+                        BackgroundColor="Transparent">
+                    </ImageButton>
+                </StackLayout>
+                <Label
+                    Text="{Binding Game.description}"
+                    Margin="5"/>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>
