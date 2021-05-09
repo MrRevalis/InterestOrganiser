@@ -20,6 +20,11 @@ namespace InterestOrganiser.Views
 
         }
 
+        ~PlayerPage()
+        {
+            DeviceDisplay.MainDisplayInfoChanged -= OrientationChanged;
+        }
+
         private void OrientationChanged(object sender, DisplayInfoChangedEventArgs e)
         {
             DisplayOrientation orientation = e.DisplayInfo.Orientation;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Xamarin.Forms;
+using Xamarin.Essentials;
 
 namespace InterestOrganiser.ViewModels
 {
@@ -47,6 +47,31 @@ namespace InterestOrganiser.ViewModels
 
             changed.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        //Connectivity
+        private bool isNotConnected;
+        public bool IsNotConnected
+        {
+            get => isNotConnected;
+            set => SetProperty(ref isNotConnected, value);
+        }
+
+        public BaseViewModel()
+        {
+            Connectivity.ConnectivityChanged += ConnectionChanged;
+            IsNotConnected = Connectivity.NetworkAccess != NetworkAccess.Internet;
+        }
+
+        ~BaseViewModel()
+        {
+            Connectivity.ConnectivityChanged -= ConnectionChanged;
+        }
+
+        private void ConnectionChanged(object sender, ConnectivityChangedEventArgs e)
+        {
+            IsNotConnected = e.NetworkAccess != NetworkAccess.Internet;
+        }
+
         #endregion
     }
 }

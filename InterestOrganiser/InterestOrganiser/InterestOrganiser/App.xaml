@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:cu="clr-namespace:InterestOrganiser.Custom"
              x:Class="InterestOrganiser.App">
 
     <Application.Resources>
@@ -49,6 +50,18 @@
                 <Setter Property="TextColor" Value="{StaticResource fuzzyDarkColor}"/>
                 <Setter Property="FontSize" Value="12"/>
             </Style>
+
+            <Style TargetType="cu:CustomEntry">
+                <Setter Property="TextColor" Value="White"/>
+                <Setter Property="BorderColor" Value="{StaticResource fuzzyDarkColor}"/>
+                <Setter Property="BackgroundColor" Value="#1A8e3940"/>
+                <Setter Property="ImageWidth" Value="35"/>
+                <Setter Property="ImageHeight" Value="35"/>
+                <Setter Property="CornerRadius" Value="8"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="PlaceholderColor" Value="White"/>
+            </Style>
+            
         </ResourceDictionary>
     </Application.Resources>
     
