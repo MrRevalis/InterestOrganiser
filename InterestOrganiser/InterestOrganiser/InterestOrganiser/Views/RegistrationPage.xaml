@@ -4,6 +4,7 @@
              xmlns:vm="clr-namespace:InterestOrganiser.ViewModels"
              xmlns:bh="clr-namespace:InterestOrganiser.Behaviors"
              xmlns:cv="clr-namespace:InterestOrganiser.Converters"
+             xmlns:cu="clr-namespace:InterestOrganiser.Custom"
              Shell.PresentationMode="ModalAnimated"
              x:Class="InterestOrganiser.Views.RegistrationPage">
 
@@ -41,17 +42,19 @@
                 FontSize="Large"
                 FontAttributes="Bold"
                 HorizontalOptions="Center"
+                Padding="50"
                 VerticalOptions="StartAndExpand"/>
 
             <!--EMAIL-->
-            <Entry
+            <cu:CustomEntry
                 Text="{Binding Email.Value}"
                 Placeholder="Email"
+                Image="ic_action_email"
                 Grid.Row="1">
                 <Entry.Behaviors>
                     <bh:EntryLineValidationBehaviour IsValid="{Binding Email.IsValid}"/>
                 </Entry.Behaviors>
-            </Entry>
+            </cu:CustomEntry>
             <Label
                 Grid.Row="2"
                 Text="{Binding Email.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
@@ -60,15 +63,16 @@
             <!---->
             
             <!--PASSWORD-->
-            <Entry
+            <cu:CustomEntry
                 Text="{Binding Password.Item1.Value}"
                 Placeholder="Password"
                 IsPassword="True"
+                Image="ic_action_lock"
                 Grid.Row="3">
                 <Entry.Behaviors>
                     <bh:EntryLineValidationBehaviour IsValid="{Binding Password.Item1.IsValid}"/>
                 </Entry.Behaviors>
-            </Entry>
+            </cu:CustomEntry>
             <Label
                 Grid.Row="4"
                 Text="{Binding Password.Item1.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
@@ -77,15 +81,16 @@
             <!---->
             
             <!--CONFIRM PASSWORD-->
-            <Entry
+            <cu:CustomEntry
                 Text="{Binding Password.Item2.Value}"
                 Placeholder="Confirm password"
+                Image="ic_action_lock"
                 IsPassword="True"
                 Grid.Row="5">
                 <Entry.Behaviors>
                     <bh:EntryLineValidationBehaviour IsValid="{Binding Password.Item2.IsValid}"/>
                 </Entry.Behaviors>
-            </Entry>
+            </cu:CustomEntry>
             <Label
                 Grid.Row="6"
                 Text="{Binding Password.Item2.Errors, Converter={StaticResource FirstValidationErrorConverter}}"

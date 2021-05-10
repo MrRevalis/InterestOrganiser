@@ -32,6 +32,15 @@ namespace InterestOrganiser.Droid
             }
         }
 
+        public string GetUserName()
+        {
+            if (IsSignIn())
+            {
+                return FirebaseAuth.Instance.CurrentUser.Email;
+            }
+            return string.Empty;
+        }
+
         public bool IsSignIn()
         {
             var user = Firebase.Auth.FirebaseAuth.Instance.CurrentUser;

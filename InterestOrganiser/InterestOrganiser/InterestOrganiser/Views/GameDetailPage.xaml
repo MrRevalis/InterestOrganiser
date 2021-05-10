@@ -4,7 +4,9 @@
              xmlns:vm="clr-namespace:InterestOrganiser.ViewModels"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:cu="clr-namespace:InterestOrganiser.Custom"
+             xmlns:cv="clr-namespace:InterestOrganiser.Converters"
              x:Class="InterestOrganiser.Views.GameDetailPage"
+             x:Name="mainPage"
              Title="{Binding Game.name}">
 
     <ContentPage.BindingContext>
@@ -17,46 +19,131 @@
             Command="{Binding AppearingCommand}"/>
     </ContentPage.Behaviors>
     
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <cv:ImageSourceConverter x:Key="ImageSourceConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
     <ContentPage.Content>
-        <ScrollView>
-            <StackLayout>
-                <cu:LoadingScreen ShouldWork="{Binding IsBusy}"/>
-                <Image
-                    Source="{Binding Game.background_image}"/>
-                <Label
-                    Text="{Binding Game.name}"
-                    HorizontalOptions="Center"
-                    Padding="5"
-                    FontSize="Large"/>
-                <StackLayout Orientation="Horizontal" Margin="10, 0">
-                    <Label HorizontalOptions="StartAndExpand">
-                        <Label.FormattedText>
-                            <FormattedString>
-                                <Span Text="Released date: "/>
-                                <Span Text="{Binding Game.released}" FontAttributes="Bold"/>
-                            </FormattedString>
-                        </Label.FormattedText>
-                    </Label>
-                    <cu:RatingBar StarsAmount="{Binding Game.rating}" HorizontalOptions="End"/>
+        <Grid>
+            <ScrollView>
+                <StackLayout>
+                    <Image
+                        Source="{Binding Game.background_image}"/>
+                    <Label
+                        Text="{Binding Game.name}"
+                        HorizontalOptions="Center"
+                        Padding="5"
+                        FontSize="Large"/>
+                    <StackLayout Orientation="Horizontal" Margin="10, 0">
+                        <Label HorizontalOptions="StartAndExpand">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Released date: "/>
+                                    <Span Text="{Binding Game.released}" FontAttributes="Bold"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <cu:RatingBar StarsAmount="{Binding Game.rating}" HorizontalOptions="End"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="End" Grid.Row="3" Grid.ColumnSpan="2">
+                        <ImageButton
+                            Source="ic_action_favorite_blank.png"
+                            WidthRequest="30"
+                            HeightRequest="30"
+                            BackgroundColor="Transparent"
+                            Command="{Binding AddToRealise}">
+                            <ImageButton.Triggers>
+                                <DataTrigger
+                                    TargetType="ImageButton"
+                                    Binding="{Binding ItemToRealise}"
+                                    Value="True">
+                                    <Setter Property="Source" Value="ic_action_favorite.png"/>
+                                </DataTrigger>
+                            </ImageButton.Triggers>
+                            <ImageButton.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding Source={x:Reference mainPage}, Path=BindingContext.AddToRealise}"/>
+                            </ImageButton.GestureRecognizers>
+                        </ImageButton>
+                        <ImageButton
+                            Source="ic_action_check_box_outline_blank.png"
+                            WidthRequest="30"
+                            HeightRequest="30"
+                            BackgroundColor="Transparent"
+                            Command="{Binding AddRealised}">
+                            <ImageButton.Triggers>
+                                <DataTrigger
+                                    TargetType="ImageButton"
+                                    Binding="{Binding ItemRealised}"
+                                    Value="True">
+                                    <Setter Property="Source" Value="ic_action_check_box.png"/>
+                                </DataTrigger>
+                            </ImageButton.Triggers>
+                            <ImageButton.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding Source={x:Reference mainPage}, Path=BindingContext.AddRealised}"/>
+                            </ImageButton.GestureRecognizers>
+                        </ImageButton>
+                    </StackLayout>
+                    <Label
+                        Text="{Binding Game.description}"
+                        Margin="5"/>
+
+                    <Label
+                        Text="Trailers"
+                        FontSize="Large"
+                        FontAttributes="Bold"
+                        Margin="5"/>
+                    <CollectionView
+                        HeightRequest="220"
+                        ItemSizingStrategy="MeasureAllItems"
+                        ItemsLayout="HorizontalList"
+                        ItemsSource="{Binding TrailerList}">
+
+                        <CollectionView.EmptyView>
+                            <Label
+                                HorizontalTextAlignment="Center"
+                                VerticalTextAlignment="Center"
+                                Text="No trailers"
+                                FontSize="Large"/>
+                        </CollectionView.EmptyView>
+
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Padding="10">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Label
+                                        Text="{Binding Name}"
+                                        FontSize="Body"
+                                        FontAttributes="Bold"
+                                        HorizontalOptions="Center"/>
+                                    <Image
+                                        Grid.Row="1"
+                                        Source="{Binding Preview, Converter={StaticResource ImageSourceConverter}, ConverterParameter='backgroundEmpty.jpg'}"/>
+                                    <Button
+                                        Grid.Row="1"
+                                        HorizontalOptions="Center"
+                                        VerticalOptions="Center"
+                                        HeightRequest="60"
+                                        WidthRequest="60"
+                                        BorderRadius="30"
+                                        BackgroundColor="#66000000"
+                                        ImageSource="ic_action_play_arrow.png"
+                                        Command="{Binding PlayVideoCommand, Source={RelativeSource AncestorType={x:Type vm:GameDetailViewModel}}}"
+                                        CommandParameter="{Binding Link}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+
+                    </CollectionView>
                 </StackLayout>
-                <StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="End" Grid.Row="3" Grid.ColumnSpan="2">
-                    <ImageButton
-                        Source="ic_action_favorite_blank.png"
-                        WidthRequest="30"
-                        HeightRequest="30"
-                        BackgroundColor="Transparent">
-                    </ImageButton>
-                    <ImageButton
-                        Source="ic_action_check_box_outline_blank.png"
-                        WidthRequest="30"
-                        HeightRequest="30"
-                        BackgroundColor="Transparent">
-                    </ImageButton>
-                </StackLayout>
-                <Label
-                    Text="{Binding Game.description}"
-                    Margin="5"/>
-            </StackLayout>
-        </ScrollView>
+            </ScrollView>
+            <cu:LoadingScreen ShouldWork="{Binding IsBusy}"/>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

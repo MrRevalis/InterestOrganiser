@@ -31,15 +31,16 @@
                     Height="60"/>
             </Grid.RowDefinitions>
             <Frame
+                BorderColor="Transparent"
                 Grid.Row="0">
                 <Frame.Background>
                     <LinearGradientBrush
                         EndPoint="0,1">
                         <GradientStop 
-                            Color="{StaticResource charcoalDarkColor}"
+                            Color="{StaticResource greenDark}"
                             Offset="0.1"/>
                         <GradientStop 
-                            Color="{StaticResource fuzzyDarkColor}"
+                            Color="{StaticResource charcoalDarkColor}"
                             Offset="1.0"/>
                     </LinearGradientBrush>
                 </Frame.Background>
@@ -58,16 +59,24 @@
 
             <Grid
                 Grid.Row="1"
-                VerticalOptions="CenterAndExpand"
+                VerticalOptions="Start"
+                HorizontalOptions="FillAndExpand"
                 Margin="20"
                 RowSpacing="20">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                    <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <cu:InternetLabel Grid.Row="0"/>
+                <Label
+                    Grid.Row="0"
+                    Text="Login"
+                    FontSize="Large"
+                    FontAttributes="Bold"
+                    VerticalOptions="Start"
+                    HorizontalOptions="Center"/>
                 <cu:CustomEntry
                     Grid.Row="1"
                     Placeholder="Email"
@@ -77,11 +86,12 @@
                         <bh:EmailValidation/>
                     </cu:CustomEntry.Behaviors>
                 </cu:CustomEntry>
-                <Entry
-                    Text="{Binding Password}"
-                    Placeholder="Password"
+                <cu:CustomEntry
+                    Grid.Row="2"
                     IsPassword="True"
-                    Grid.Row="2"/>
+                    Placeholder="Password"
+                    Text="{Binding Password}"
+                    Image="ic_action_lock"/>
                 <Button
                     Text="Login"
                     Command="{Binding Login}"
@@ -94,9 +104,16 @@
                             Binding="{Binding IsBusy}"
                             Value="True">
                             <Setter Property="IsEnabled" Value="False"/>
+                            <Setter Property="Text" Value=""/>
                         </DataTrigger>
                     </Button.Triggers>
                 </Button>
+                <ActivityIndicator
+                    IsVisible="{Binding IsBusy}"
+                    IsRunning="{Binding IsBusy}"
+                    Grid.Row="3"
+                    InputTransparent="True"/>
+                <cu:InternetLabel Grid.Row="4"/>
             </Grid>
             <StackLayout
                 Grid.Row="2">
@@ -120,13 +137,6 @@
                     </Label.Triggers>
                 </Label>
             </StackLayout>
-            <ActivityIndicator
-                IsRunning="{Binding IsBusy}"
-                Grid.Row="1"
-                HorizontalOptions="Center"
-                VerticalOptions="Center"
-                Margin="0, 0, 0, 20"
-                InputTransparent="True"/>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

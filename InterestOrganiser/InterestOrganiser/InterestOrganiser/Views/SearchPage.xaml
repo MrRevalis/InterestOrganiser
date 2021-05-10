@@ -31,25 +31,21 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            
-            <SearchBar
+
+            <cu:CustomSearchBar
                 Grid.Row="0"
                 x:Name="searchBar"
+                TextColor="White"
                 SearchCommand="{Binding SearchCommand}"
                 SearchCommandParameter="{Binding Text, Source={x:Reference searchBar}}">
-                <SearchBar.Behaviors>
+                <cu:CustomSearchBar.Behaviors>
                     <xct:UserStoppedTypingBehavior
                         Command="{Binding SearchCommand}"
                         StoppedTypingTimeThreshold="1000"
                         MinimumLengthThreshold="2"
                         ShouldDismissKeyboardAutomatically="True"/>
-                </SearchBar.Behaviors>
-            </SearchBar>
-            <BoxView
-                VerticalOptions="End"
-                Grid.Row="0"
-                HeightRequest="1"
-                BackgroundColor="{StaticResource greenDark}"/>
+                </cu:CustomSearchBar.Behaviors>
+            </cu:CustomSearchBar>
             <Label
                 Padding="10"
                 Grid.Row="1">
@@ -71,7 +67,7 @@
             <CollectionView
                 Grid.Row="2"
                 ItemsSource="{Binding SearchList}"
-                RemainingItemsThreshold="20"
+                RemainingItemsThreshold="10"
                 RemainingItemsThresholdReachedCommand="{Binding LoadMoreItems}">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Orientation="Vertical" Span="3"/>
@@ -84,7 +80,7 @@
                                 <RowDefinition Height="180"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
-                            <Image Source="{Binding Background, Converter={StaticResource ImageSourceConverter}}" Grid.Row="0" Aspect="Fill"/>
+                            <Image Source="{Binding Background, Converter={StaticResource ImageSourceConverter}}" Grid.Row="0" Aspect="AspectFill"/>
                             <Label Text="{Binding Title}" FontSize="Body" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Row="1"/>
                             <Grid.GestureRecognizers>
                                 <TapGestureRecognizer 

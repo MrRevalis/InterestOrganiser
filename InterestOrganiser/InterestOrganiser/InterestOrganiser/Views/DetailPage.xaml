@@ -91,6 +91,10 @@
                                             <Setter Property="Source" Value="ic_action_check_box.png"/>
                                         </DataTrigger>
                                     </ImageButton.Triggers>
+                                    <ImageButton.GestureRecognizers>
+                                        <TapGestureRecognizer
+                                            Command="{Binding Source={x:Reference mainPage}, Path=BindingContext.AddRealised}"/>
+                                    </ImageButton.GestureRecognizers>
                                 </ImageButton>
                             </StackLayout>
                         </StackLayout>
@@ -153,8 +157,8 @@
                                             Source="{Binding Image, Converter={StaticResource ImageSourceConverter}}">
                                             <Image.Clip>
                                                 <EllipseGeometry
-                                                    RadiusX="50"
-                                                    RadiusY="50"
+                                                    RadiusX="40"
+                                                    RadiusY="40"
                                                     Center="45,60"/>
                                             </Image.Clip>
                                         </Image>
@@ -178,6 +182,17 @@
                         ItemsLayout="HorizontalList"
                         ItemsSource="{Binding VideoList}"
                         HeightRequest="220">
+
+                        <CollectionView.EmptyView>
+                            <ContentView>
+                                <Label
+                                    Text="No trailers"
+                                    FontSize="Large"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center"/>
+                            </ContentView>
+                        </CollectionView.EmptyView>
+                        
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
                                 <Grid Margin="5">

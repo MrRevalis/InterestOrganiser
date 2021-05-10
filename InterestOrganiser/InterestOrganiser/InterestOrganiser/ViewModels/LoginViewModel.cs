@@ -17,13 +17,10 @@ namespace InterestOrganiser.ViewModels
         public string Email { get; set; } = "dominikr26@interia.pl";
         public string Password { get; set; } = "123456";
 
-        private IFirebase auth;
-
         public LoginViewModel()
         {
             Login = new Command(async () => await LoginMethod());
             Register = new Command(async () => await Shell.Current.GoToAsync("//login/registration"));
-            auth = DependencyService.Get<IFirebase>();
         }
 
         private async Task LoginMethod()
@@ -31,7 +28,7 @@ namespace InterestOrganiser.ViewModels
             if(!String.IsNullOrEmpty(Email) && !String.IsNullOrEmpty(Password))
             {
                 IsBusy = true;
-                var token = await auth.Login(Email, Password);
+                var token = await FirebaseAuth.Login(Email, Password);
                 if(token != String.Empty)
                 {
                     await Shell.Current.GoToAsync("//main");

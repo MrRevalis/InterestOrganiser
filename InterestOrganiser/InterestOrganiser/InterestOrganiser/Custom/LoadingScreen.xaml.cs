@@ -19,7 +19,7 @@ namespace InterestOrganiser.Custom
                 nameof(ShouldWork),
                 typeof(bool),
                 typeof(LoadingScreen),
-                defaultValue: false,
+                defaultValue: default(bool),
                 propertyChanged: ShouldWorkPropertyChanged
                 );
 
@@ -41,6 +41,7 @@ namespace InterestOrganiser.Custom
                 base.SetValue(ShouldWorkProperty, value);
             }
         }
+
         public LoadingScreen()
         {
             InitializeComponent();

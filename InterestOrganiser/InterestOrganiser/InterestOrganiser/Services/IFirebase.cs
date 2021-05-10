@@ -11,5 +11,6 @@ namespace InterestOrganiser.Services
         Task<string> CreateAccount(string email, string password);
         bool SignOut();
         bool IsSignIn();
+        string GetUserName();
     }
 }

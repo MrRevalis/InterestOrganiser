@@ -40,7 +40,7 @@
             </Style>
 
             <Style TargetType="Button">
-                <Setter Property="BackgroundColor" Value="{StaticResource fuzzyDarkColor}"/>
+                <Setter Property="BackgroundColor" Value="{StaticResource greenDark}"/>
                 <Setter Property="TextColor" Value="White"/>
                 <Setter Property="WidthRequest" Value="180"/>
                 <Setter Property="HeightRequest" Value="40"/>
@@ -53,8 +53,8 @@
 
             <Style TargetType="cu:CustomEntry">
                 <Setter Property="TextColor" Value="White"/>
-                <Setter Property="BorderColor" Value="{StaticResource fuzzyDarkColor}"/>
-                <Setter Property="BackgroundColor" Value="#1A8e3940"/>
+                <Setter Property="BorderColor" Value="#215461"/>
+                <Setter Property="BackgroundColor" Value="#0DFFFFFF"/>
                 <Setter Property="ImageWidth" Value="35"/>
                 <Setter Property="ImageHeight" Value="35"/>
                 <Setter Property="CornerRadius" Value="8"/>

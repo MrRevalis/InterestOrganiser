@@ -106,9 +106,14 @@ namespace InterestOrganiser.ViewModels
             }
         }
 
-        private void SignOut()
+        private async void SignOut()
         {
+            bool signOut = FirebaseAuth.SignOut();
 
+            if (signOut)
+            {
+                await Shell.Current.GoToAsync($"//login");
+            }
         }
 
         private async void GoToSearchPage()

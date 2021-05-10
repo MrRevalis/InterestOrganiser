@@ -13,9 +13,9 @@
             x:Name="indicator"
             Scale="2"/>
         <Label
+            Text="Loading"
             HorizontalOptions="Center"
             FontSize="Large"
-            Padding="0, 20"
-            Text="Loading"/>
+            Padding="0, 20"/>
     </StackLayout>
 </Frame>

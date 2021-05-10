@@ -62,6 +62,14 @@ namespace InterestOrganiser.ViewModels
             set => SetProperty(ref videosList, value);
         }
 
+        private FirebaseItem itemDB;
+        public FirebaseItem ItemDB
+        {
+            get => itemDB;
+            set => SetProperty(ref itemDB, value);
+        }
+
+
 
         public DetailViewModel()
         {
@@ -74,9 +82,6 @@ namespace InterestOrganiser.ViewModels
             AddRealised = new Command(async () => await AddRealisedItem());
             AddToRealise = new Command(async () => await AddToRealiseItem());
             PlayVideoCommand = new Command<string>(async (sender) => await PlayVideo(sender));
-
-            ItemRealised = false;
-            ItemToRealise = true;
         }
 
         private async Task PlayVideo(string link)
@@ -84,17 +89,21 @@ namespace InterestOrganiser.ViewModels
             if (String.IsNullOrEmpty(link))
                 return;
 
-            await Shell.Current.GoToAsync($"video?url={link}");
+            await Shell.Current.GoToAsync($"video?url={link}&type=youtube");
         }
 
         private async Task AddToRealiseItem()
         {
-            ItemToRealise = !ItemToRealise;
+            ItemDB.ToRealise = !ItemDB.ToRealise;
+            ItemToRealise = ItemDB.ToRealise;
+            await FirebaseDB.UpdateItem(ItemDB);
         }
 
         private async Task AddRealisedItem()
         {
-            ItemRealised = !ItemRealised;
+            ItemDB.Realised = !ItemDB.Realised;
+            ItemRealised = ItemDB.Realised;
+            await FirebaseDB.UpdateItem(ItemDB);
         }
 
         private async Task OnAppearing()
@@ -109,6 +118,17 @@ namespace InterestOrganiser.ViewModels
 
             List<Video> videos = await movieDB.MoviesTrailers(ID, Type.ToLower());
             VideoList.AddRange(videos);
+
+            ItemDB = await FirebaseDB.CheckItem(FirebaseAuth.GetUserName(), ID);
+            if(ItemDB.ID == null)
+            {
+                ItemDB.ID = ID;
+                ItemDB.Owner = FirebaseAuth.GetUserName();
+                ItemDB.Type = Type;
+            }
+            ItemRealised = ItemDB.Realised;
+            ItemToRealise = ItemDB.ToRealise;
+            //await FirebaseDB.AddItem(new FirebaseItem { ID = ID, Owner = FirebaseAuth.GetUserName(), Realised = false, ToRealise = false, Type = Type });
 
             if (Item == null)
                 await Shell.Current.GoToAsync("//main");

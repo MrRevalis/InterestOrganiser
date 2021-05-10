@@ -11,6 +11,7 @@ using YoutubeExplode.Videos.Streams;
 namespace InterestOrganiser.ViewModels
 {
     [QueryProperty("Url", "url")]
+    [QueryProperty("Type", "type")]
     public class PlayerViewModel : BaseViewModel
     {
         private string url;
@@ -18,6 +19,13 @@ namespace InterestOrganiser.ViewModels
         {
             get => url;
             set => SetProperty(ref url, value);
+        }
+
+        private string type;
+        public string Type
+        {
+            get => type;
+            set => SetProperty(ref type, value);
         }
 
         private MediaSource streamVideo;
@@ -43,18 +51,26 @@ namespace InterestOrganiser.ViewModels
             if (String.IsNullOrEmpty(Url))
                 return;
             IsBusy = true;
-            string link = "https://www.youtube.com/watch?v=" + Url;
-            YoutubeClient youtube = new YoutubeClient();
-            Video video = await youtube.Videos.GetAsync(link);
-
-            StreamManifest streamManifest = await youtube.Videos.Streams.GetManifestAsync(link);
-            IVideoStreamInfo streamInfo = streamManifest.GetMuxedStreams().GetWithHighestVideoQuality();
-
-            if(streamInfo != null)
+            if (Type.Equals("youtube"))
             {
-                Stream stream = await youtube.Videos.Streams.GetAsync(streamInfo);
-                StreamVideo = streamInfo.Url;
+                string link = "https://www.youtube.com/watch?v=" + Url;
+                YoutubeClient youtube = new YoutubeClient();
+                Video video = await youtube.Videos.GetAsync(link);
+
+                StreamManifest streamManifest = await youtube.Videos.Streams.GetManifestAsync(link);
+                IVideoStreamInfo streamInfo = streamManifest.GetMuxedStreams().GetWithHighestVideoQuality();
+
+                if (streamInfo != null)
+                {
+                    Stream stream = await youtube.Videos.Streams.GetAsync(streamInfo);
+                    StreamVideo = streamInfo.Url;
+                }
             }
+            else
+            {
+                StreamVideo = Url;
+            }
+            
             IsBusy = false;
         }
     }

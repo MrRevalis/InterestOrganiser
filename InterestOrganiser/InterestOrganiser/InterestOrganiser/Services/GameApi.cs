@@ -1,6 +1,7 @@
 ﻿using InterestOrganiser.Models;
 using InterestOrganiser.Models.Game;
 using InterestOrganiser.Models.GameDetail;
+using InterestOrganiser.Models.GameTrailers;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -36,6 +37,26 @@ namespace InterestOrganiser.Services
                 }
             }
             return null;
+        }
+
+        public async Task<List<Trailers>> GetGameTrailers(string ID)
+        {
+            HttpResponseMessage response = await client.GetAsync($"games/{ID}/movies?key={api}");
+            if (response.IsSuccessStatusCode)
+            {
+                string content = await response.Content.ReadAsStringAsync();
+                GameTrailers gameTrailers = JsonConvert.DeserializeObject<GameTrailers>(content);
+                if(gameTrailers != null)
+                {
+                    return gameTrailers.results.Select(x => new Trailers
+                    {
+                        Name = x.name,
+                        Preview = x.preview,
+                        Link = x.data.max
+                    }).ToList();
+                }
+            }
+            return new List<Trailers>();
         }
 
         public async Task<List<SearchItem>> SearchGames(string title)

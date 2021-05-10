@@ -1,15 +1,18 @@
-﻿using System;
+﻿using InterestOrganiser.Services;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Xamarin.Essentials;
+using Xamarin.Forms;
 
 namespace InterestOrganiser.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
         //public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>();
-
+        public IFirebase FirebaseAuth => DependencyService.Get<IFirebase>();
+        public IDBFirebase FirebaseDB => DependencyService.Get<IDBFirebase>();
         bool isBusy = false;
         public bool IsBusy
         {

@@ -15,6 +15,8 @@ namespace InterestOrganiser.ViewModels
         private IBookApi bookApi;
 
         public ICommand AppearingCommand { get; }
+        public ICommand AddRealised { get; private set; }
+        public ICommand AddToRealise { get; private set; }
 
         private string id;
         public string ID
@@ -30,6 +32,27 @@ namespace InterestOrganiser.ViewModels
             set => SetProperty(ref book, value);
         }
 
+        private bool itemRealised;
+        public bool ItemRealised
+        {
+            get => itemRealised;
+            set => SetProperty(ref itemRealised, value);
+        }
+
+        private bool itemToRealise;
+        public bool ItemToRealise
+        {
+            get => itemToRealise;
+            set => SetProperty(ref itemToRealise, value);
+        }
+
+        private FirebaseItem itemDB;
+        public FirebaseItem ItemDB
+        {
+            get => itemDB;
+            set => SetProperty(ref itemDB, value);
+        }
+
         public BookDetailViewModel()
         {
             bookApi = DependencyService.Get<IBookApi>();
@@ -37,6 +60,22 @@ namespace InterestOrganiser.ViewModels
             Book = new BookDetail();
 
             AppearingCommand = new Command(async () => await OnAppearing());
+            AddRealised = new Command(async () => await AddRealisedItem());
+            AddToRealise = new Command(async () => await AddToRealiseItem());
+        }
+
+        private async Task AddToRealiseItem()
+        {
+            ItemDB.ToRealise = !ItemDB.ToRealise;
+            ItemToRealise = ItemDB.ToRealise;
+            await FirebaseDB.UpdateItem(ItemDB);
+        }
+
+        private async Task AddRealisedItem()
+        {
+            ItemDB.Realised = !ItemDB.Realised;
+            ItemRealised = ItemDB.Realised;
+            await FirebaseDB.UpdateItem(ItemDB);
         }
 
         private async Task OnAppearing()
@@ -47,6 +86,17 @@ namespace InterestOrganiser.ViewModels
             if (response != null)
             {
                 Book = response;
+
+                ItemDB = await FirebaseDB.CheckItem(FirebaseAuth.GetUserName(), ID);
+                if (ItemDB.ID == null)
+                {
+                    ItemDB.ID = ID;
+                    ItemDB.Owner = FirebaseAuth.GetUserName();
+                    ItemDB.Type = "books";
+                }
+                ItemRealised = ItemDB.Realised;
+                ItemToRealise = ItemDB.ToRealise;
+
             }
             else
             {

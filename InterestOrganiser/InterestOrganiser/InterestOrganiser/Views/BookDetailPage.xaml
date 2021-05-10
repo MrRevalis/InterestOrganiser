@@ -6,6 +6,7 @@
              xmlns:cu="clr-namespace:InterestOrganiser.Custom"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              x:Class="InterestOrganiser.Views.BookDetailPage"
+             x:Name="mainPage"
              Title="{Binding Book.Book.Title}">
 
     <ContentPage.BindingContext>
@@ -95,14 +96,39 @@
                                 Source="ic_action_favorite_blank.png"
                                 WidthRequest="30"
                                 HeightRequest="30"
-                                BackgroundColor="Transparent">
+                                BackgroundColor="Transparent"
+                                Command="{Binding AddToRealise}">
+                                <ImageButton.Triggers>
+                                    <DataTrigger
+                                        TargetType="ImageButton"
+                                        Binding="{Binding ItemToRealise}"
+                                        Value="True">
+                                        <Setter Property="Source" Value="ic_action_favorite.png"/>
+                                    </DataTrigger>
+                                </ImageButton.Triggers>
+                                <ImageButton.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                    Command="{Binding Source={x:Reference mainPage}, Path=BindingContext.AddToRealise}"/>
+                                </ImageButton.GestureRecognizers>
                             </ImageButton>
-
                             <ImageButton
                                 Source="ic_action_check_box_outline_blank.png"
                                 WidthRequest="30"
                                 HeightRequest="30"
-                                BackgroundColor="Transparent">
+                                BackgroundColor="Transparent"
+                                Command="{Binding AddRealised}">
+                                <ImageButton.Triggers>
+                                    <DataTrigger
+                                        TargetType="ImageButton"
+                                        Binding="{Binding ItemRealised}"
+                                        Value="True">
+                                        <Setter Property="Source" Value="ic_action_check_box.png"/>
+                                    </DataTrigger>
+                                </ImageButton.Triggers>
+                                <ImageButton.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding Source={x:Reference mainPage}, Path=BindingContext.AddRealised}"/>
+                                </ImageButton.GestureRecognizers>
                             </ImageButton>
                         </StackLayout>
                     </Grid>

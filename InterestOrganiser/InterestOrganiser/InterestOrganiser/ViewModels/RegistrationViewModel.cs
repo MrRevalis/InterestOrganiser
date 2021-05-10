@@ -15,8 +15,6 @@ namespace InterestOrganiser.ViewModels
         public ValidatableObject<string> Email { get; set; }
         public ValidatablePair<string> Password { get; set; }
 
-        private IFirebase auth;
-
         public RegistrationViewModel()
         {
             Return = new Command(async () => await Shell.Current.GoToAsync("//login"));
@@ -31,18 +29,16 @@ namespace InterestOrganiser.ViewModels
             Password.Item1.Validations.Add(new IsLenghtValidRule<string> { ValidationMessage = "Password between 6-20 characters", MinimunLength = 6, MaximunLength = 20 });
             Password.Item2.Validations.Add(new IsNotNullOrEmptyRule<string> { ValidationMessage = "Confirm password required" });
             Password.Validations.Add(new PasswordsMatchRule<string> { ValidationMessage = "Password and confirm password don't match" });
-
-            auth = DependencyService.Get<IFirebase>();
         }
 
         private async Task Registration()
         {
             if (ValidateFields())
             {
-                var user = await auth.CreateAccount(Email.Value, Password.Item1.Value);
+                var user = await FirebaseAuth.CreateAccount(Email.Value, Password.Item1.Value);
                 if(user != String.Empty)
                 {
-                    var signOut = auth.SignOut();
+                    var signOut = FirebaseAuth.SignOut();
                     if (signOut)
                     {
                         await Shell.Current.GoToAsync("//login");
