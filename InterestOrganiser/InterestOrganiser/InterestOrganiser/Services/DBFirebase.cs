@@ -46,14 +46,20 @@ namespace InterestOrganiser.Services
             return new FirebaseItem();
         }
 
-        public Task<List<FirebaseItem>> GetItemsForUser(string owner)
+        public async Task<List<FirebaseItem>> GetItemsForUser(string owner)
         {
-            throw new NotImplementedException();
+            var getItems = await client.Child("Items").OnceAsync<FirebaseItem>();
+            if(getItems != null)
+            {
+                var items = getItems.Where(x => x.Object.Owner == owner).Select(y => y.Object).ToList();
+                return items;
+            }
+            return new List<FirebaseItem>();
         }
 
         public async Task UpdateItem(FirebaseItem item)
         {
-            var itemToUpdate = (await client.Child("Items").OnceAsync<FirebaseItem>());
+            var itemToUpdate = await client.Child("Items").OnceAsync<FirebaseItem>();
             if(itemToUpdate != null)
             {
                 var specificItem = itemToUpdate.FirstOrDefault(x => x.Object.Owner == item.Owner && x.Object.ID == item.ID);

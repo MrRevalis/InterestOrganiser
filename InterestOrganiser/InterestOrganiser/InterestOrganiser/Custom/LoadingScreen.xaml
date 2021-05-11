@@ -10,6 +10,7 @@
     <StackLayout
         VerticalOptions="Center">
         <ActivityIndicator
+            Color="White"
             x:Name="indicator"
             Scale="2"/>
         <Label

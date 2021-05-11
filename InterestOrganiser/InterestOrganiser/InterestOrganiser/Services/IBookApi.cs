@@ -10,5 +10,6 @@ namespace InterestOrganiser.Services
     {
         Task<List<SearchItem>> SearchBooks(string title);
         Task<BookDetail> GetBook(string id);
+        Task<BrowseItem> BrowseBook(string id);
     }
 }

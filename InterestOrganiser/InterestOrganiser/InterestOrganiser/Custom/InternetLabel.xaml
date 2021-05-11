@@ -2,12 +2,17 @@
 <StackLayout xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="InterestOrganiser.Custom.InternetLabel"
-             IsVisible="{Binding IsNotConnected}"
-             BackgroundColor="OrangeRed">
-    
-    <Label 
-        Text="Oops, looks like you don't have internet connection :("
-        TextColor="White"
-        HorizontalOptions="CenterAndExpand"
-        Margin="20"/>
+             IsVisible="{Binding IsNotConnected}">
+    <Frame
+        CornerRadius="15"
+        BackgroundColor="{StaticResource blueDarkColor}">
+        <Label
+            Text="Oops, looks like you don't have internet connection :("
+            TextColor="Red"
+            FontSize="Medium"
+            HorizontalTextAlignment="Center"
+            HorizontalOptions="Center"
+            VerticalOptions="Center"/>
+    </Frame>
+
 </StackLayout>

@@ -21,7 +21,7 @@ namespace InterestOrganiser.ViewModels
         private IBookApi bookApi;
         private IGameApi gameApi;
 
-        private int batchSize = 20;
+        private int batchSize = 30;
         private int currentIndex = 0;
 
         #region Commands

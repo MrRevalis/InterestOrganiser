@@ -33,7 +33,7 @@ namespace InterestOrganiser.ViewModels
 
         private async Task Registration()
         {
-            if (ValidateFields())
+            if (ValidateFields() && !IsNotConnected)
             {
                 var user = await FirebaseAuth.CreateAccount(Email.Value, Password.Item1.Value);
                 if(user != String.Empty)

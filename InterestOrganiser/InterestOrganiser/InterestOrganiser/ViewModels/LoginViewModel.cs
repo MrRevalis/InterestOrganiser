@@ -25,7 +25,7 @@ namespace InterestOrganiser.ViewModels
 
         private async Task LoginMethod()
         {
-            if(!String.IsNullOrEmpty(Email) && !String.IsNullOrEmpty(Password))
+            if(!String.IsNullOrEmpty(Email) && !String.IsNullOrEmpty(Password) && !IsNotConnected)
             {
                 IsBusy = true;
                 var token = await FirebaseAuth.Login(Email, Password);

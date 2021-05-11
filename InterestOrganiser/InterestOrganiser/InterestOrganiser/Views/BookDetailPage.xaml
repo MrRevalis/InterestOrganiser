@@ -108,7 +108,7 @@
                                 </ImageButton.Triggers>
                                 <ImageButton.GestureRecognizers>
                                     <TapGestureRecognizer
-                                    Command="{Binding Source={x:Reference mainPage}, Path=BindingContext.AddToRealise}"/>
+                                        Command="{Binding Source={x:Reference mainPage}, Path=BindingContext.AddToRealise}"/>
                                 </ImageButton.GestureRecognizers>
                             </ImageButton>
                             <ImageButton

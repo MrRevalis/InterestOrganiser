@@ -20,6 +20,7 @@
         </Tab>
         <Tab
             Title="Browse"
+            Route="browse"
             Icon="ic_action_featured_play_list.png">
             <ShellContent 
                 ContentTemplate="{DataTemplate local:BrowsePage}" />

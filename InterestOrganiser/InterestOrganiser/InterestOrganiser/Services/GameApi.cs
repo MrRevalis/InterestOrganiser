@@ -24,6 +24,28 @@ namespace InterestOrganiser.Services
             client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
         }
 
+        public async Task<BrowseItem> BrowseGame(string ID)
+        {
+            HttpResponseMessage response = await client.GetAsync($"games/{ID}?key={api}");
+            if (response.IsSuccessStatusCode)
+            {
+                string content = await response.Content.ReadAsStringAsync();
+                GameDetail game = JsonConvert.DeserializeObject<GameDetail>(content);
+                if (game != null)
+                {
+                    return new BrowseItem
+                    {
+                        ID = ID,
+                        Image = game.background_image,
+                        Title = game.name,
+                        Type = "games"
+                    };
+                }
+            }
+            return new BrowseItem();
+        }
+
+
         public async Task<GameDetail> GetGameDetails(string ID)
         {
             HttpResponseMessage response = await client.GetAsync($"games/{ID}?key={api}");

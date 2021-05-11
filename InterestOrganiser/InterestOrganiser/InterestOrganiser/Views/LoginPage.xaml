@@ -64,11 +64,11 @@
                 Margin="20"
                 RowSpacing="20">
                 <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Label
                     Grid.Row="0"
@@ -111,6 +111,7 @@
                 <ActivityIndicator
                     IsVisible="{Binding IsBusy}"
                     IsRunning="{Binding IsBusy}"
+                    Color="White"
                     Grid.Row="3"
                     InputTransparent="True"/>
                 <cu:InternetLabel Grid.Row="4"/>

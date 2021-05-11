@@ -67,7 +67,7 @@
             <CollectionView
                 Grid.Row="2"
                 ItemsSource="{Binding SearchList}"
-                RemainingItemsThreshold="10"
+                RemainingItemsThreshold="20"
                 RemainingItemsThresholdReachedCommand="{Binding LoadMoreItems}">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Orientation="Vertical" Span="3"/>

@@ -26,6 +26,50 @@ namespace InterestOrganiser.Services
             client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
         }
 
+        public async Task<BrowseItem> BrowseMovie(string ID)
+        {
+            HttpResponseMessage response = await client.GetAsync($"movie/{ID}?api_key={api}");
+            if (response.IsSuccessStatusCode)
+            {
+                string content = await response.Content.ReadAsStringAsync();
+                MovieDetail movieResponse = JsonConvert.DeserializeObject<MovieDetail>(content);
+
+                if (movieResponse != null)
+                {
+                    return new BrowseItem
+                    {
+                        ID = ID,
+                        Image = imageSource + movieResponse.backdrop_path,
+                        Title = movieResponse.title,
+                        Type = "movies"
+                    };
+                }
+            }
+            return new BrowseItem();
+        }
+
+        public async Task<BrowseItem> BrowseTV(string ID)
+        {
+            HttpResponseMessage response = await client.GetAsync($"tv/{ID}?api_key={api}");
+            if (response.IsSuccessStatusCode)
+            {
+                string content = await response.Content.ReadAsStringAsync();
+                MovieDetail movieResponse = JsonConvert.DeserializeObject<MovieDetail>(content);
+
+                if (movieResponse != null)
+                {
+                    return new BrowseItem
+                    {
+                        ID = ID,
+                        Image = imageSource + movieResponse.backdrop_path,
+                        Title = movieResponse.original_title ?? movieResponse.name,
+                        Type = "tv series"
+                    };
+                }
+            }
+            return new BrowseItem();
+        }
+
         public async Task<List<CastDetail>> MovieCast(string ID)
         {
             HttpResponseMessage response = await client.GetAsync($"movie/{ID}/credits?api_key={api}");

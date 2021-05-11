@@ -22,6 +22,22 @@ namespace InterestOrganiser.Services
             });
         }
 
+        public async Task<BrowseItem> BrowseBook(string id)
+        {
+            var res = await booksService.Volumes.Get(id).ExecuteAsync();
+            if (res != null)
+            {
+                return new BrowseItem
+                {
+                    ID = res.Id,
+                    Image = res.VolumeInfo.ImageLinks != null ? res.VolumeInfo.ImageLinks.Thumbnail : "",
+                    Title = res.VolumeInfo.Title,
+                    Type = "books"
+                };
+            }
+            return null;
+        }
+
         public async Task<BookDetail> GetBook(string id)
         {
             var res = await booksService.Volumes.Get(id).ExecuteAsync();
