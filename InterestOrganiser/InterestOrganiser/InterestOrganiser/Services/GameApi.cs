@@ -24,9 +24,9 @@ namespace InterestOrganiser.Services
             client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public async Task<BrowseItem> BrowseGame(string ID)
+        public async Task<BrowseItem> BrowseGame(FirebaseItem item)
         {
-            HttpResponseMessage response = await client.GetAsync($"games/{ID}?key={api}");
+            HttpResponseMessage response = await client.GetAsync($"games/{item.ID}?key={api}");
             if (response.IsSuccessStatusCode)
             {
                 string content = await response.Content.ReadAsStringAsync();
@@ -35,10 +35,12 @@ namespace InterestOrganiser.Services
                 {
                     return new BrowseItem
                     {
-                        ID = ID,
+                        ID = item.ID,
                         Image = game.background_image,
                         Title = game.name,
-                        Type = "games"
+                        Type = "games",
+                        Realised = item.Realised,
+                        ToRealise = item.ToRealise
                     };
                 }
             }

@@ -14,8 +14,19 @@ namespace InterestOrganiser.ViewModels
     {
         public ICommand Login { get; }
         public ICommand Register { get; }
-        public string Email { get; set; } = "dominikr26@interia.pl";
-        public string Password { get; set; } = "123456";
+
+        private string email = "dominikr26@interia.pl";
+        public string Email
+        {
+            get => email;
+            set => SetProperty(ref email, value);
+        }
+        private string password = "123456";
+        public string Password
+        {
+            get => password;
+            set => SetProperty(ref password, value);
+        }
 
         public LoginViewModel()
         {
@@ -32,6 +43,8 @@ namespace InterestOrganiser.ViewModels
                 if(token != String.Empty)
                 {
                     await Shell.Current.GoToAsync("//main");
+                    Email = "";
+                    Password = "";
                 }
                 IsBusy = false;
             }

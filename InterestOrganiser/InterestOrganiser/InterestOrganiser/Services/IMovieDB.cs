@@ -23,7 +23,7 @@ namespace InterestOrganiser.Services
         Task<List<SearchItem>> SimilarMovies(string ID);
         Task<List<SearchItem>> SimilarTV(string ID);
         Task<List<Video>> MoviesTrailers(string ID, string type);
-        Task<BrowseItem> BrowseMovie(string ID);
-        Task<BrowseItem> BrowseTV(string ID);
+        Task<BrowseItem> BrowseMovie(FirebaseItem item);
+        Task<BrowseItem> BrowseTV(FirebaseItem item);
     }
 }

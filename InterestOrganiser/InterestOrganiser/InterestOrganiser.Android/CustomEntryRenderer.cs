@@ -66,7 +66,12 @@ namespace InterestOrganiser.Droid
 
             Control.SetPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
 
-            //Control.BackgroundTintList = ColorStateList.ValueOf(Android.Graphics.Color.Yellow);
+
+            IntPtr IntPtrtextViewClass = JNIEnv.FindClass(typeof(TextView));
+
+            IntPtr mCursorDrawableResProperty = JNIEnv.GetFieldID(IntPtrtextViewClass, "mCursorDrawableRes", "I");
+            JNIEnv.SetField(Control.Handle, mCursorDrawableResProperty, Resource.Drawable.cursor);
+
         }
 
         private BitmapDrawable GetDrawable(string image)

@@ -70,9 +70,18 @@ namespace InterestOrganiser.ViewModels
             Connectivity.ConnectivityChanged -= ConnectionChanged;
         }
 
-        private void ConnectionChanged(object sender, ConnectivityChangedEventArgs e)
+        private async void ConnectionChanged(object sender, ConnectivityChangedEventArgs e)
         {
             IsNotConnected = e.NetworkAccess != NetworkAccess.Internet;
+            var currentPage = Shell.Current.CurrentItem.Route;
+            if(currentPage != "login" && IsNotConnected == true)
+            {
+                await Shell.Current.GoToAsync($"//{currentPage}/internet");
+            }
+            else
+            {
+                await Shell.Current.GoToAsync("..");
+            }
         }
 
         #endregion

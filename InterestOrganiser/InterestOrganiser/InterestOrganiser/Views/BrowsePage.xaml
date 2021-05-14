@@ -3,8 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:InterestOrganiser.ViewModels"
              xmlns:cv="clr-namespace:InterestOrganiser.Converters"
-             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:cu="clr-namespace:InterestOrganiser.Custom"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              x:Class="InterestOrganiser.Views.BrowsePage"
              x:Name="browsePage"
              Title="Browse">
@@ -18,112 +18,76 @@
             EventName="Appearing"
             Command="{Binding AppearingCommand}"/>
     </ContentPage.Behaviors>
-    
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <cv:LabelClickedConverter x:Key="LabelClickedConverter"/>
-            <cv:ImageSourceConverter x:Key="ImageSourceConverter"/>
-        </ResourceDictionary>
-    </ContentPage.Resources>
-    
-    <ContentPage.Content>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
 
+    <ContentPage.Resources>
+        <cv:ImageSourceConverter x:Key="ImageSourceConverter"/>
+    </ContentPage.Resources>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem 
+            IconImageSource="ic_action_logout.png"
+            Command="{Binding SignOutCommand}"/>
+    </ContentPage.ToolbarItems>
+
+    <xct:TabView
+        TabIndicatorPlacement="Bottom"
+        TabIndicatorColor="{StaticResource greenDark}"
+        TabStripPlacement="Top"
+        IsSwipeEnabled="True"
+        SelectedIndex="0">
+
+        <xct:TabViewItem
+            Text="Favourite"
+            TextColor="#A9A9A9"
+            TextColorSelected="White">
             <Grid
-                Grid.Row="0"
-                Grid.Column="0"
-                Padding="10">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="5"/>
-                </Grid.RowDefinitions>
-                <Label
-                    Grid.Row="0"
-                    HorizontalTextAlignment="Center"
-                    x:Name="fvLabel"
-                    Text="Favourite"
-                    FontSize="Medium">
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding Source={x:Reference browsePage}, Path=BindingContext.ChangeTypeCommand}" CommandParameter="Favourite"/>
-                    </Label.GestureRecognizers>
-                </Label>
-                <BoxView
-                    Grid.Row="1"
-                    BackgroundColor="{Binding Source={x:Reference browsePage}, Path=BindingContext.CurrentItemType, Converter={StaticResource LabelClickedConverter}, ConverterParameter={x:Reference Name=fvLabel}}"/>
-            </Grid>
-            
-            <Grid
-                Padding="10"
-                Grid.Row="0"
-                Grid.Column="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="5"/>
-                </Grid.RowDefinitions>
-                <Label
-                    HorizontalTextAlignment="Center"
-                    Grid.Row="0"
-                    x:Name="reLabel"
-                    Text="Realised"
-                    FontSize="Medium">
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding Source={x:Reference browsePage}, Path=BindingContext.ChangeTypeCommand}" CommandParameter="Realised"/>
-                    </Label.GestureRecognizers>
-                </Label>
-                <BoxView
-                    Grid.Row="1"
-                    BackgroundColor="{Binding Source={x:Reference browsePage}, Path=BindingContext.CurrentItemType, Converter={StaticResource LabelClickedConverter}, ConverterParameter={x:Reference Name=reLabel}}"/>
-            </Grid>
-            <CollectionView
-                Margin="10"
-                Grid.Row="1"
-                Grid.ColumnSpan="2"
-                ItemsSource="{Binding Items}">
-                <CollectionView.ItemsLayout>
-                    <GridItemsLayout Orientation="Vertical" VerticalItemSpacing="10" />
-                </CollectionView.ItemsLayout>
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Frame
-                            Padding="0"
-                            BackgroundColor="{StaticResource blueDarkColor}"
-                            CornerRadius="15">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="200"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="80*"/>
-                                    <ColumnDefinition Width="20*"/>
-                                </Grid.ColumnDefinitions>
-                                <Image
-                                    Grid.Row="0"
-                                    Grid.ColumnSpan="2"
-                                    Source="{Binding Image, Converter={StaticResource ImageSourceConverter}}"
-                                    Aspect="AspectFill"/>
-                                <Label
-                                    Grid.Row="1"
-                                    Grid.Column="0"
-                                    Margin="5"
-                                    FontSize="Medium"
-                                    HorizontalTextAlignment="Center"
-                                    Text="{Binding Title}"/>
-                                <StackLayout Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
+                Margin="10">
+                <cu:LoadingScreen ShouldWork="{Binding IsBusy}"/>
+                <CollectionView
+                    ItemsSource="{Binding FavouriteItems}">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout
+                            Orientation="Vertical"
+                            VerticalItemSpacing="20"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame
+                                Padding="0"
+                                BackgroundColor="{StaticResource charcoalColor}"
+                                CornerRadius="20">
+                                <Grid
+                                    RowSpacing="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="160"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="80*"/>
+                                        <ColumnDefinition Width="10*"/>
+                                        <ColumnDefinition Width="10*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Image
+                                        Grid.Row="0"
+                                        Grid.ColumnSpan="3"
+                                        Source="{Binding Image, Converter={StaticResource ImageSourceConverter}}"
+                                        Aspect="AspectFill"/>
+                                    <Label
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        Text="{Binding Title}"
+                                        FontSize="Medium"
+                                        FontAttributes="Bold"
+                                        Margin="5, 3"
+                                        VerticalTextAlignment="Center"/>
                                     <ImageButton
                                         Source="ic_action_favorite_blank.png"
-                                        WidthRequest="30"
-                                        HeightRequest="30"
-                                        BackgroundColor="Transparent"
-                                        Command="{Binding Source={x:Reference browsePage}, Path=BindingContext.AddToRealise}"
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        BackgroundColor="{StaticResource charcoalColor}"
+                                        HeightRequest="64"
+                                        WidthRequest="64"
+                                        Command="{Binding AddFavouriteCommand, Source={RelativeSource AncestorType={x:Type vm:BrowseViewModel}}}"
                                         CommandParameter="{Binding .}">
                                         <ImageButton.Triggers>
                                             <DataTrigger
@@ -136,10 +100,12 @@
                                     </ImageButton>
                                     <ImageButton
                                         Source="ic_action_check_box_outline_blank.png"
-                                        WidthRequest="30"
-                                        HeightRequest="30"
-                                        BackgroundColor="Transparent"
-                                        Command="{Binding Source={x:Reference browsePage}, Path=BindingContext.AddRealised}"
+                                        Grid.Row="1"
+                                        Grid.Column="2"
+                                        BackgroundColor="{StaticResource charcoalColor}"
+                                        HeightRequest="64"
+                                        WidthRequest="64"
+                                        Command="{Binding AddRealisedCommand, Source={RelativeSource AncestorType={x:Type vm:BrowseViewModel}}}"
                                         CommandParameter="{Binding .}">
                                         <ImageButton.Triggers>
                                             <DataTrigger
@@ -150,18 +116,110 @@
                                             </DataTrigger>
                                         </ImageButton.Triggers>
                                     </ImageButton>
-                                </StackLayout>
-                            </Grid>
-                            <Frame.GestureRecognizers>
-                                <TapGestureRecognizer 
-                                    Command="{Binding ChangePageCommand, Source={RelativeSource AncestorType={x:Type vm:BrowseViewModel}}}"
-                                    CommandParameter="{Binding .}"/>
-                            </Frame.GestureRecognizers>
-                        </Frame>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-            <cu:LoadingScreen ShouldWork="{Binding IsBusy}" Grid.Row="1" Grid.ColumnSpan="2"/>
-        </Grid>
-    </ContentPage.Content>
+                                </Grid>
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding ChangePageCommand, Source={RelativeSource AncestorType={x:Type vm:BrowseViewModel}}}"
+                                        CommandParameter="{Binding .}"/>
+                                </Frame.GestureRecognizers>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+        </xct:TabViewItem>
+
+        <xct:TabViewItem 
+            Text="Realised"
+            TextColor="#A9A9A9"
+            TextColorSelected="White">
+            <Grid 
+                Margin="10">
+                <cu:LoadingScreen ShouldWork="{Binding IsBusy}"/>
+                <CollectionView
+                    ItemsSource="{Binding RealisedItems}">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout
+                            Orientation="Vertical"
+                            VerticalItemSpacing="20"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame
+                                Padding="0"
+                                BackgroundColor="{StaticResource charcoalColor}"
+                                CornerRadius="20">
+                                <Grid
+                                    RowSpacing="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="160"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="80*"/>
+                                        <ColumnDefinition Width="10*"/>
+                                        <ColumnDefinition Width="10*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Image
+                                        Grid.Row="0"
+                                        Grid.ColumnSpan="3"
+                                        Source="{Binding Image, Converter={StaticResource ImageSourceConverter}}"
+                                        Aspect="AspectFill"/>
+                                    <Label
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        Text="{Binding Title}"
+                                        FontSize="Medium"
+                                        FontAttributes="Bold"
+                                        Margin="5, 3"
+                                        VerticalTextAlignment="Center"/>
+                                    <ImageButton
+                                        Source="ic_action_favorite_blank.png"
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        BackgroundColor="{StaticResource charcoalColor}"
+                                        HeightRequest="64"
+                                        WidthRequest="64"
+                                        Command="{Binding AddFavouriteCommand, Source={RelativeSource AncestorType={x:Type vm:BrowseViewModel}}}"
+                                        CommandParameter="{Binding .}">
+                                        <ImageButton.Triggers>
+                                            <DataTrigger
+                                                TargetType="ImageButton"
+                                                Binding="{Binding ToRealise}"
+                                                Value="True">
+                                                <Setter Property="Source" Value="ic_action_favorite.png"/>
+                                            </DataTrigger>
+                                        </ImageButton.Triggers>
+                                    </ImageButton>
+                                    <ImageButton
+                                        Source="ic_action_check_box_outline_blank.png"
+                                        Grid.Row="1"
+                                        Grid.Column="2"
+                                        BackgroundColor="{StaticResource charcoalColor}"
+                                        HeightRequest="64"
+                                        WidthRequest="64"
+                                        Command="{Binding AddRealisedCommand, Source={RelativeSource AncestorType={x:Type vm:BrowseViewModel}}}"
+                                        CommandParameter="{Binding .}">
+                                        <ImageButton.Triggers>
+                                            <DataTrigger
+                                                TargetType="ImageButton"
+                                                Binding="{Binding Realised}"
+                                                Value="True">
+                                                <Setter Property="Source" Value="ic_action_check_box.png"/>
+                                            </DataTrigger>
+                                        </ImageButton.Triggers>
+                                    </ImageButton>
+                                </Grid>
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding ChangePageCommand, Source={RelativeSource AncestorType={x:Type vm:BrowseViewModel}}}"
+                                        CommandParameter="{Binding .}"/>
+                                </Frame.GestureRecognizers>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+        </xct:TabViewItem>
+    </xct:TabView>
 </ContentPage>

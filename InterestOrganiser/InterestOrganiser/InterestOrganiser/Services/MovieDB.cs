@@ -26,9 +26,9 @@ namespace InterestOrganiser.Services
             client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public async Task<BrowseItem> BrowseMovie(string ID)
+        public async Task<BrowseItem> BrowseMovie(FirebaseItem item)
         {
-            HttpResponseMessage response = await client.GetAsync($"movie/{ID}?api_key={api}");
+            HttpResponseMessage response = await client.GetAsync($"movie/{item.ID}?api_key={api}");
             if (response.IsSuccessStatusCode)
             {
                 string content = await response.Content.ReadAsStringAsync();
@@ -38,19 +38,21 @@ namespace InterestOrganiser.Services
                 {
                     return new BrowseItem
                     {
-                        ID = ID,
+                        ID = item.ID,
                         Image = imageSource + movieResponse.backdrop_path,
                         Title = movieResponse.title,
-                        Type = "movies"
+                        Type = "movies",
+                        Realised = item.Realised,
+                        ToRealise = item.ToRealise
                     };
                 }
             }
             return new BrowseItem();
         }
 
-        public async Task<BrowseItem> BrowseTV(string ID)
+        public async Task<BrowseItem> BrowseTV(FirebaseItem item)
         {
-            HttpResponseMessage response = await client.GetAsync($"tv/{ID}?api_key={api}");
+            HttpResponseMessage response = await client.GetAsync($"tv/{item.ID}?api_key={api}");
             if (response.IsSuccessStatusCode)
             {
                 string content = await response.Content.ReadAsStringAsync();
@@ -60,10 +62,12 @@ namespace InterestOrganiser.Services
                 {
                     return new BrowseItem
                     {
-                        ID = ID,
+                        ID = item.ID,
                         Image = imageSource + movieResponse.backdrop_path,
                         Title = movieResponse.original_title ?? movieResponse.name,
-                        Type = "tv series"
+                        Type = "tv series",
+                        Realised = item.Realised,
+                        ToRealise = item.ToRealise
                     };
                 }
             }

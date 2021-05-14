@@ -15,6 +15,7 @@ namespace InterestOrganiser
             Routing.RegisterRoute("detailgame", typeof(GameDetailPage));
             Routing.RegisterRoute("search", typeof(SearchPage));
             Routing.RegisterRoute("video", typeof(PlayerPage));
+            Routing.RegisterRoute("internet", typeof(NoInternetPage));
 
         }
 

@@ -22,9 +22,9 @@ namespace InterestOrganiser.Services
             });
         }
 
-        public async Task<BrowseItem> BrowseBook(string id)
+        public async Task<BrowseItem> BrowseBook(FirebaseItem item)
         {
-            var res = await booksService.Volumes.Get(id).ExecuteAsync();
+            var res = await booksService.Volumes.Get(item.ID).ExecuteAsync();
             if (res != null)
             {
                 return new BrowseItem
@@ -32,7 +32,9 @@ namespace InterestOrganiser.Services
                     ID = res.Id,
                     Image = res.VolumeInfo.ImageLinks != null ? res.VolumeInfo.ImageLinks.Thumbnail : "",
                     Title = res.VolumeInfo.Title,
-                    Type = "books"
+                    Type = "books",
+                    Realised = item.Realised,
+                    ToRealise = item.ToRealise
                 };
             }
             return null;
