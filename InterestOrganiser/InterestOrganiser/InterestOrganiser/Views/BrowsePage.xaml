@@ -42,7 +42,6 @@
             TextColorSelected="White">
             <Grid
                 Margin="10">
-                <cu:LoadingScreen ShouldWork="{Binding IsBusy}"/>
                 <CollectionView
                     ItemsSource="{Binding FavouriteItems}">
                     <CollectionView.ItemsLayout>
@@ -126,6 +125,7 @@
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
+                <cu:LoadingScreen ShouldWork="{Binding IsBusy}"/>
             </Grid>
         </xct:TabViewItem>
 
@@ -135,7 +135,6 @@
             TextColorSelected="White">
             <Grid 
                 Margin="10">
-                <cu:LoadingScreen ShouldWork="{Binding IsBusy}"/>
                 <CollectionView
                     ItemsSource="{Binding RealisedItems}">
                     <CollectionView.ItemsLayout>
@@ -219,6 +218,7 @@
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
+                <cu:LoadingScreen ShouldWork="{Binding IsBusy}"/>
             </Grid>
         </xct:TabViewItem>
     </xct:TabView>

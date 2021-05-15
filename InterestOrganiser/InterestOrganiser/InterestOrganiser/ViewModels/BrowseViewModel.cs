@@ -17,7 +17,6 @@ namespace InterestOrganiser.ViewModels
         private IBookApi bookApi;
         private IGameApi gameApi;
         private string username;
-        private int lastItemCount;
 
         public ICommand AppearingCommand { get; private set; }
         public ICommand SignOutCommand { get; private set; }
@@ -56,13 +55,12 @@ namespace InterestOrganiser.ViewModels
             RealisedItems = new ObservableRangeCollection<BrowseItem>();
 
             username = FirebaseAuth.GetUserName();
-            lastItemCount = 0;
         }
 
         private async Task AddToFavouriteItem(BrowseItem item)
         {
             int index = FavouriteItems.IndexOf(item);
-
+            int realisedIndex = RealisedItems.IndexOf(item);
             item.ToRealise = !item.ToRealise;
             if (item.ToRealise == true)
             {
@@ -75,7 +73,11 @@ namespace InterestOrganiser.ViewModels
                     FavouriteItems.RemoveAt(index);
                 }
             }
-            OnPropertyChanged(nameof(RealisedItems));
+
+            if (realisedIndex >= 0)
+            {
+                RealisedItems[realisedIndex] = item;
+            }
             FirebaseItem firebaseItem = new FirebaseItem() { ID = item.ID, Owner = username, Realised = item.Realised, ToRealise = item.ToRealise, Type = item.Type };
             await FirebaseDB.UpdateItem(firebaseItem);
         }
@@ -83,7 +85,7 @@ namespace InterestOrganiser.ViewModels
         private async Task AddRealisedItem(BrowseItem item)
         {
             int index = RealisedItems.IndexOf(item);
-
+            int favouriteIndex = FavouriteItems.IndexOf(item);
             item.Realised = !item.Realised;
             if (item.Realised == true)
             {
@@ -96,7 +98,11 @@ namespace InterestOrganiser.ViewModels
                     RealisedItems.RemoveAt(index);
                 }
             }
-            OnPropertyChanged(nameof(FavouriteItems));
+
+            if(favouriteIndex >= 0)
+            {
+                FavouriteItems[favouriteIndex] = item;
+            }
 
             FirebaseItem firebaseItem = new FirebaseItem() { ID = item.ID, Owner = username, Realised = item.Realised, ToRealise = item.ToRealise, Type = item.Type };
             await FirebaseDB.UpdateItem(firebaseItem);
@@ -131,44 +137,130 @@ namespace InterestOrganiser.ViewModels
             IsBusy = true;
 
             List<FirebaseItem> firebaseItems = await FirebaseDB.GetItemsForUser(username);
-
-            lastItemCount = firebaseItems.Count;
-            List<BrowseItem> favourite = new List<BrowseItem>();
-            List<BrowseItem> realised = new List<BrowseItem>();
-
-            foreach (FirebaseItem item in firebaseItems)
+            if(RealisedItems.Count > 0 && FavouriteItems.Count > 0)
             {
-                BrowseItem browseItem;
-                switch (item.Type)
+                await RefreshData(firebaseItems);
+            }
+            else
+            {
+                List<BrowseItem> favourite = new List<BrowseItem>();
+                List<BrowseItem> realised = new List<BrowseItem>();
+
+                foreach (FirebaseItem item in firebaseItems)
                 {
-                    case "movies":
-                        browseItem = await movieDB.BrowseMovie(item);
-                        break;
-                    case "tv series":
-                        browseItem = await movieDB.BrowseTV(item);
-                        break;
-                    case "books":
-                        browseItem = await bookApi.BrowseBook(item);
-                        break;
-                    case "games":
-                        browseItem = await gameApi.BrowseGame(item);
-                        break;
-                    default:
-                        continue;
+                    BrowseItem browseItem;
+                    switch (item.Type)
+                    {
+                        case "movies":
+                            browseItem = await movieDB.BrowseMovie(item);
+                            break;
+                        case "tv series":
+                            browseItem = await movieDB.BrowseTV(item);
+                            break;
+                        case "books":
+                            browseItem = await bookApi.BrowseBook(item);
+                            break;
+                        case "games":
+                            browseItem = await gameApi.BrowseGame(item);
+                            break;
+                        default:
+                            continue;
+                    }
+                    if (browseItem != null)
+                    {
+                        if (browseItem.Realised == true)
+                            realised.Add(browseItem);
+                        if (browseItem.ToRealise == true)
+                            favourite.Add(browseItem);
+                    }
                 }
-                if (browseItem != null)
+
+                FavouriteItems.AddRange(favourite);
+                RealisedItems.AddRange(realised);
+
+            }
+
+            IsBusy = false;
+        }
+
+        private async Task RefreshData(List<FirebaseItem> firebase)
+        {
+            List<BrowseItem> realised = new List<BrowseItem>();
+            List<BrowseItem> favourite = new List<BrowseItem>();
+
+            foreach(FirebaseItem item in firebase)
+            {
+                if(item.Realised == true)
                 {
-                    if (browseItem.Realised == true)
+                    BrowseItem oldItem = RealisedItems.FirstOrDefault(x => x.ID == item.ID);
+                    if(oldItem == null)
+                    {
+                        BrowseItem browseItem;
+                        switch (item.Type)
+                        {
+                            case "movies":
+                                browseItem = await movieDB.BrowseMovie(item);
+                                break;
+                            case "tv series":
+                                browseItem = await movieDB.BrowseTV(item);
+                                break;
+                            case "books":
+                                browseItem = await bookApi.BrowseBook(item);
+                                break;
+                            case "games":
+                                browseItem = await gameApi.BrowseGame(item);
+                                break;
+                            default:
+                                continue;
+                        }
                         realised.Add(browseItem);
-                    if (browseItem.ToRealise == true)
+                    }
+                    else
+                    {
+                        oldItem.Realised = item.Realised;
+                        oldItem.ToRealise = item.ToRealise;
+                        realised.Add(oldItem);
+                    }
+                }
+                if(item.ToRealise == true)
+                {
+                    BrowseItem oldItem = FavouriteItems.FirstOrDefault(x => x.ID == item.ID);
+                    if (oldItem == null)
+                    {
+                        BrowseItem browseItem;
+                        switch (item.Type)
+                        {
+                            case "movies":
+                                browseItem = await movieDB.BrowseMovie(item);
+                                break;
+                            case "tv series":
+                                browseItem = await movieDB.BrowseTV(item);
+                                break;
+                            case "books":
+                                browseItem = await bookApi.BrowseBook(item);
+                                break;
+                            case "games":
+                                browseItem = await gameApi.BrowseGame(item);
+                                break;
+                            default:
+                                continue;
+                        }
                         favourite.Add(browseItem);
+                    }
+                    else
+                    {
+                        oldItem.Realised = item.Realised;
+                        oldItem.ToRealise = item.ToRealise;
+                        favourite.Add(oldItem);
+                    }
                 }
             }
 
-            FavouriteItems.AddRange(favourite);
+            RealisedItems.Clear();
             RealisedItems.AddRange(realised);
 
-            IsBusy = false;
+            FavouriteItems.Clear();
+            FavouriteItems.AddRange(favourite);
         }
     }
 }
